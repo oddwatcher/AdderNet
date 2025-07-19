@@ -92,7 +92,12 @@ def train(epoch, start_time):
     with open(log, "a") as f:
         f.write(
             "Train - Epoch %d, Avg. Loss: %f, Time:%dmin:%dsec \n "
-            % (epoch, i, avg_loss, int((time.time() - start_time)) / 60),
+            % (
+                epoch,
+                avg_loss,
+                int((time.time() - start_time) / 60),
+                int((time.time() - start_time) % 60),
+            ),
         )
 
 
