@@ -67,7 +67,7 @@ def train(epoch, start_time):
     global cur_batch_win
     net.train()
     loss_list, batch_list = [], []
-    print("Train - Epoch %d")
+    print("Train - Epoch %d" % epoch)
     for i, (images, labels) in tqdm(
         enumerate(data_train_loader), total=len(data_train_loader)
     ):

@@ -43,14 +43,14 @@ class ResNet(nn.Module):
     def __init__(self, block, layers, num_classes=10):
         super(ResNet, self).__init__()
         self.inplanes = 16
-
+        # 修改输入通道为1（单色图像）
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(16)
         self.relu = nn.ReLU(inplace=True)
         self.layer1 = self._make_layer(block, 16, layers[0])
         self.layer2 = self._make_layer(block, 32, layers[1], stride=2)
         self.layer3 = self._make_layer(block, 64, layers[2], stride=2)
-
+        # 使用自适应平均池化
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Conv2d(64 * block.expansion, num_classes, 1, bias=False)
         self.bn2 = nn.BatchNorm2d(num_classes)

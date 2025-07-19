@@ -16,39 +16,37 @@ import math
 import time
 from tqdm import tqdm
 
-
 parser = argparse.ArgumentParser(description="train-addernet")
 
 # Basic model parameters.
 parser.add_argument("--data", type=str, default="./cache/data/")
 parser.add_argument("--output_dir", type=str, default="./cache/models/")
 args = parser.parse_args()
-start_time = time.asctime()
-log = args.output_dir + start_time + "log.txt"
+
 os.makedirs(args.output_dir, exist_ok=True)
 
 acc = 0
 acc_best = 0
-weights_best = {}
 
 transform_train = transforms.Compose(
     [
         transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
     ]
 )
 
 transform_test = transforms.Compose(
     [
-        transforms.RandomCrop(32, padding=4),
         transforms.ToTensor(),
+
     ]
 )
 
 data_train = MNIST(args.data, download=True, transform=transform_train)
 data_test = MNIST(args.data, train=False, transform=transform_test)
 
-data_train_loader = DataLoader(data_train, batch_size=256, shuffle=True, num_workers=16)
+data_train_loader = DataLoader(data_train, batch_size=256, shuffle=True, num_workers=8)
 data_test_loader = DataLoader(data_test, batch_size=100, num_workers=0)
 
 net = resnet20().cuda()
@@ -89,22 +87,21 @@ def train(epoch, start_time):
     for i in loss_list:
         total_loss += i
     avg_loss = total_loss / len(loss_list)
-    with open(log, "a") as f:
+    with open(args.output_dir + "log.txt", "a") as f:
         f.write(
             "Train - Epoch %d, Avg. Loss: %f, Time:%dmin:%dsec \n "
             % (epoch, i, avg_loss, int((time.time() - start_time)) / 60),
+            int((time.time() - start_time)) % 60,
         )
 
 
 def test():
-    global acc, acc_best, weights_best
+    global acc, acc_best
     net.eval()
     total_correct = 0
     avg_loss = 0.0
     with torch.no_grad():
-        for i, (images, labels) in tqdm(
-            enumerate(data_test_loader), total=(len(data_test_loader))
-        ):
+        for i, (images, labels) in tqdm(enumerate(data_test_loader)):
             images, labels = Variable(images).cuda(), Variable(labels).cuda()
             output = net(images)
             avg_loss += criterion(output, labels).sum()
@@ -115,28 +112,23 @@ def test():
     acc = float(total_correct) / len(data_test)
     if acc_best < acc:
         acc_best = acc
-        weights_best = net.state_dict()
-    with open(log, "a") as f:
+    with open(args.output_dir + "log.txt", "a") as f:
         f.write("Test Avg. Loss: %f, Accuracy: %f\n" % (avg_loss.data.item(), acc))
     print("Test Avg. Loss: %f, Accuracy: %f" % (avg_loss.data.item(), acc))
 
 
-def train_and_test(epoch, start):
-    train(epoch, start)
+def train_and_test(epoch,start):
+    train(epoch,start)
     test()
-    if epoch % 10 == 0:
-        torch.save(net.state_dict(), args.output_dir + "addernet_mono_%d.pt" % epoch)
-        torch.save(weights_best, args.output_dir + "addernet_mono_best.pt")
-    else:
-        torch.save(net.state_dict(), args.output_dir + "addernet_mono_temp.pt")
 
 
 def main():
     epoch = 400
     for e in range(1, epoch):
-        train_and_test(e, time.time())
-    torch.save(net.state_dict(), args.output_dir + "addernet_mono_final.pt")
-    torch.save(weights_best, args.output_dir + "addernet_mono_best.pt")
+        train_and_test(e,time.time())
+        if e % 10 == 0:
+            torch.save(net.state_dict(), args.output_dir + "addernet_%d" % e)
+    torch.save(net.state_dict(), args.output_dir + "addernet_final")
 
 
 if __name__ == "__main__":
