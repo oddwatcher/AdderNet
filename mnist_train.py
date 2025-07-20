@@ -102,7 +102,7 @@ def train(epoch, start_time):
 
 
 def test():
-    global acc, acc_best, weights_best
+    global acc, acc_best, weights_best, net
     net.eval()
     total_correct = 0
     avg_loss = 0.0

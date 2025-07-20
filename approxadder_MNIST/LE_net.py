@@ -1,42 +1,25 @@
-# Copyright (C) 2019. Huawei Technologies Co., Ltd. All rights reserved.
-
-# This program is free software; you can redistribute it and/or modify it under the terms of the BSD 3-Clause License.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the BSD 3-Clause License for more details.
-
-import os
-from resnet20 import resnet20
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from torch.autograd import Variable
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import MNIST
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
+
 import argparse
-import math
+import os
 import time
 from tqdm import tqdm
 
-device = "cuda:1"
-
-parser = argparse.ArgumentParser(description="train-addernet")
-
+parser = argparse.ArgumentParser(description="train-lenet")
 # Basic model parameters.
 parser.add_argument("--data", type=str, default="./cache/data/")
 parser.add_argument("--output_dir", type=str, default="./cache/models/")
-parser.add_argument("--preweight", type=str, default=None)
-
-
 args = parser.parse_args()
-
-if args.preweight:
-    net = resnet20()
-    net.load_state_dict(torch.load(args.preweight))
-    net.to(device)
-else:
-    net = resnet20().to(device)
 start_time = time.asctime()
 log = args.output_dir + start_time + "log.txt"
 os.makedirs(args.output_dir, exist_ok=True)
+device = "cuda:1"
 
 acc = 0
 acc_best = 0
@@ -44,40 +27,64 @@ weights_best = {}
 
 transform_train = transforms.Compose(
     [
-        transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
+        transforms.Resize((32, 32)),
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        transforms.Normalize((0.1307,), (0.3081,)),
     ]
 )
-
 transform_test = transforms.Compose(
     [
+        transforms.Resize((32, 32)),
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        transforms.Normalize((0.1307,), (0.3081,)),
     ]
 )
 
-data_train = CIFAR10(args.data, download=True, transform=transform_train)
-data_test = CIFAR10(args.data, train=False, transform=transform_test)
+
+class LeNet(nn.Module):
+    def __init__(self):
+        super(LeNet, self).__init__()
+        self.conv1 = nn.Conv2d(1, 6, 5)
+        self.relu = nn.ReLU()
+        self.maxpool1 = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.maxpool2 = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.relu(x)
+        x = self.maxpool1(x)
+        x = self.conv2(x)
+        x = self.maxpool2(x)
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        output = F.log_softmax(x, dim=1)
+        return output
+
+
+def lenet():
+    return LeNet()
+
+
+data_train = MNIST(args.data, download=True, transform=transform_train)
+data_test = MNIST(args.data, train=False, transform=transform_test)
 
 data_train_loader = DataLoader(data_train, batch_size=256, shuffle=True, num_workers=16)
 data_test_loader = DataLoader(data_test, batch_size=100, num_workers=0)
 
+net = lenet().to(device)
 criterion = torch.nn.CrossEntropyLoss().to(device)
-optimizer = torch.optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-
-
-def adjust_learning_rate(optimizer, epoch):
-    """For resnet, the lr starts from 0.1, and is divided by 10 at 80 and 120 epochs"""
-    lr = 0.05 * (1 + math.cos(float(epoch) / 400 * math.pi))
-    for param_group in optimizer.param_groups:
-        param_group["lr"] = lr
+optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
 
 
 def train(epoch, start_time):
-    adjust_learning_rate(optimizer, epoch)
-    global cur_batch_win
+
     net.train()
     loss_list, batch_list = [], []
     print("Train - Epoch %d" % epoch)
@@ -94,7 +101,6 @@ def train(epoch, start_time):
 
         loss_list.append(loss.data.item())
         batch_list.append(i + 1)
-
         loss.backward()
         optimizer.step()
     total_loss = 0
@@ -142,17 +148,18 @@ def train_and_test(epoch, start):
     train(epoch, start)
     test()
     if epoch % 10 == 0:
-        torch.save(weights_best, args.output_dir + "addernet_best.pt")
+        torch.save(net.state_dict(), args.output_dir + "lenet_mono_%d.pt" % epoch)
+        torch.save(weights_best, args.output_dir + "lenet_mono_best.pt")
     else:
-        torch.save(net.state_dict(), args.output_dir + "addernet_temp.pt")
+        torch.save(net.state_dict(), args.output_dir + "lenet_mono_temp.pt")
 
 
 def main():
-    epoch = 400
+    epoch = 100
     for e in range(1, epoch):
         train_and_test(e, time.time())
-    torch.save(net.state_dict(), args.output_dir + "addernet_final.pt")
-    torch.save(weights_best, args.output_dir + "addernet_best.pt")
+    torch.save(net.state_dict(), args.output_dir + "lenet_mono_final.pt")
+    torch.save(weights_best, args.output_dir + "lenet_mono_best.pt")
 
 
 if __name__ == "__main__":
