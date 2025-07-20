@@ -1,0 +1,798 @@
+Train - Epoch 1, Avg. Loss: 1.906417, Time:2min:51sec 
+ Test Avg. Loss: 0.035568, Accuracy: 0.155000
+Train - Epoch 2, Avg. Loss: 1.437748, Time:2min:51sec 
+ Test Avg. Loss: 0.049669, Accuracy: 0.157000
+Train - Epoch 3, Avg. Loss: 1.165718, Time:2min:51sec 
+ Test Avg. Loss: 0.044988, Accuracy: 0.164600
+Train - Epoch 4, Avg. Loss: 0.989564, Time:2min:51sec 
+ Test Avg. Loss: 0.047352, Accuracy: 0.167200
+Train - Epoch 5, Avg. Loss: 0.868849, Time:2min:51sec 
+ Test Avg. Loss: 0.056237, Accuracy: 0.100200
+Train - Epoch 6, Avg. Loss: 0.794644, Time:2min:51sec 
+ Test Avg. Loss: 0.053049, Accuracy: 0.100100
+Train - Epoch 7, Avg. Loss: 0.734589, Time:2min:51sec 
+ Test Avg. Loss: 0.041711, Accuracy: 0.100000
+Train - Epoch 8, Avg. Loss: 0.682513, Time:2min:51sec 
+ Test Avg. Loss: 0.031914, Accuracy: 0.128600
+Train - Epoch 9, Avg. Loss: 0.661402, Time:2min:51sec 
+ Test Avg. Loss: 0.030018, Accuracy: 0.192800
+Train - Epoch 10, Avg. Loss: 0.623093, Time:2min:51sec 
+ Test Avg. Loss: 0.038084, Accuracy: 0.105200
+Train - Epoch 11, Avg. Loss: 0.613316, Time:2min:51sec 
+ Test Avg. Loss: 0.030717, Accuracy: 0.187000
+Train - Epoch 12, Avg. Loss: 0.596869, Time:2min:51sec 
+ Test Avg. Loss: 0.019874, Accuracy: 0.321600
+Train - Epoch 13, Avg. Loss: 0.582809, Time:2min:51sec 
+ Test Avg. Loss: 0.026740, Accuracy: 0.320800
+Train - Epoch 14, Avg. Loss: 0.569535, Time:2min:51sec 
+ Test Avg. Loss: 0.023961, Accuracy: 0.226300
+Train - Epoch 15, Avg. Loss: 0.560423, Time:2min:51sec 
+ Test Avg. Loss: 0.038737, Accuracy: 0.213400
+Train - Epoch 16, Avg. Loss: 0.547862, Time:2min:51sec 
+ Test Avg. Loss: 0.022569, Accuracy: 0.396400
+Train - Epoch 17, Avg. Loss: 0.536627, Time:2min:51sec 
+ Test Avg. Loss: 0.023984, Accuracy: 0.266200
+Train - Epoch 18, Avg. Loss: 0.525411, Time:2min:51sec 
+ Test Avg. Loss: 0.023937, Accuracy: 0.379700
+Train - Epoch 19, Avg. Loss: 0.514124, Time:2min:51sec 
+ Test Avg. Loss: 0.050337, Accuracy: 0.196700
+Train - Epoch 20, Avg. Loss: 0.517299, Time:2min:51sec 
+ Test Avg. Loss: 0.118247, Accuracy: 0.100600
+Train - Epoch 21, Avg. Loss: 0.505696, Time:2min:51sec 
+ Test Avg. Loss: 0.028878, Accuracy: 0.365400
+Train - Epoch 22, Avg. Loss: 0.504700, Time:2min:51sec 
+ Test Avg. Loss: 0.015652, Accuracy: 0.493900
+Train - Epoch 23, Avg. Loss: 0.498452, Time:2min:51sec 
+ Test Avg. Loss: 0.052938, Accuracy: 0.273100
+Train - Epoch 24, Avg. Loss: 0.488392, Time:2min:51sec 
+ Test Avg. Loss: 0.038235, Accuracy: 0.300600
+Train - Epoch 25, Avg. Loss: 0.492480, Time:2min:51sec 
+ Test Avg. Loss: 0.036286, Accuracy: 0.221700
+Train - Epoch 26, Avg. Loss: 0.485511, Time:2min:51sec 
+ Test Avg. Loss: 0.025509, Accuracy: 0.391300
+Train - Epoch 27, Avg. Loss: 0.474457, Time:2min:51sec 
+ Test Avg. Loss: 0.029929, Accuracy: 0.405900
+Train - Epoch 28, Avg. Loss: 0.475189, Time:2min:51sec 
+ Test Avg. Loss: 0.019123, Accuracy: 0.514200
+Train - Epoch 29, Avg. Loss: 0.472698, Time:2min:51sec 
+ Test Avg. Loss: 0.042584, Accuracy: 0.299500
+Train - Epoch 30, Avg. Loss: 0.467286, Time:2min:51sec 
+ Test Avg. Loss: 0.031489, Accuracy: 0.380200
+Train - Epoch 31, Avg. Loss: 0.461944, Time:2min:51sec 
+ Test Avg. Loss: 0.019141, Accuracy: 0.481600
+Train - Epoch 32, Avg. Loss: 0.465837, Time:2min:51sec 
+ Test Avg. Loss: 0.025145, Accuracy: 0.388700
+Train - Epoch 33, Avg. Loss: 0.455283, Time:2min:51sec 
+ Test Avg. Loss: 0.050733, Accuracy: 0.230400
+Train - Epoch 34, Avg. Loss: 0.455027, Time:2min:51sec 
+ Test Avg. Loss: 0.027178, Accuracy: 0.416800
+Train - Epoch 35, Avg. Loss: 0.450522, Time:2min:51sec 
+ Test Avg. Loss: 0.077947, Accuracy: 0.154800
+Train - Epoch 36, Avg. Loss: 0.450480, Time:2min:51sec 
+ Test Avg. Loss: 0.023141, Accuracy: 0.386400
+Train - Epoch 37, Avg. Loss: 0.451709, Time:2min:51sec 
+ Test Avg. Loss: 0.027929, Accuracy: 0.465000
+Train - Epoch 38, Avg. Loss: 0.446199, Time:2min:51sec 
+ Test Avg. Loss: 0.012068, Accuracy: 0.635500
+Train - Epoch 39, Avg. Loss: 0.453172, Time:2min:51sec 
+ Test Avg. Loss: 0.018571, Accuracy: 0.535800
+Train - Epoch 40, Avg. Loss: 0.443355, Time:2min:51sec 
+ Test Avg. Loss: 0.073079, Accuracy: 0.275200
+Train - Epoch 41, Avg. Loss: 0.447560, Time:2min:51sec 
+ Test Avg. Loss: 0.031183, Accuracy: 0.400600
+Train - Epoch 42, Avg. Loss: 0.435703, Time:2min:51sec 
+ Test Avg. Loss: 0.015290, Accuracy: 0.548800
+Train - Epoch 43, Avg. Loss: 0.436075, Time:2min:51sec 
+ Test Avg. Loss: 0.025635, Accuracy: 0.418300
+Train - Epoch 44, Avg. Loss: 0.433440, Time:2min:51sec 
+ Test Avg. Loss: 0.036046, Accuracy: 0.396000
+Train - Epoch 45, Avg. Loss: 0.436067, Time:2min:51sec 
+ Test Avg. Loss: 0.018056, Accuracy: 0.481400
+Train - Epoch 46, Avg. Loss: 0.428232, Time:2min:51sec 
+ Test Avg. Loss: 0.029284, Accuracy: 0.346100
+Train - Epoch 47, Avg. Loss: 0.432378, Time:2min:51sec 
+ Test Avg. Loss: 0.037669, Accuracy: 0.295900
+Train - Epoch 48, Avg. Loss: 0.428640, Time:2min:51sec 
+ Test Avg. Loss: 0.023139, Accuracy: 0.410400
+Train - Epoch 49, Avg. Loss: 0.434518, Time:2min:51sec 
+ Test Avg. Loss: 0.081591, Accuracy: 0.183200
+Train - Epoch 50, Avg. Loss: 0.427921, Time:2min:51sec 
+ Test Avg. Loss: 0.042969, Accuracy: 0.337400
+Train - Epoch 51, Avg. Loss: 0.423754, Time:2min:51sec 
+ Test Avg. Loss: 0.035815, Accuracy: 0.373300
+Train - Epoch 52, Avg. Loss: 0.425665, Time:2min:51sec 
+ Test Avg. Loss: 0.021078, Accuracy: 0.424500
+Train - Epoch 53, Avg. Loss: 0.424682, Time:2min:51sec 
+ Test Avg. Loss: 0.040339, Accuracy: 0.312900
+Train - Epoch 54, Avg. Loss: 0.424748, Time:2min:51sec 
+ Test Avg. Loss: 0.057224, Accuracy: 0.299800
+Train - Epoch 55, Avg. Loss: 0.418857, Time:2min:51sec 
+ Test Avg. Loss: 0.025015, Accuracy: 0.418900
+Train - Epoch 56, Avg. Loss: 0.421795, Time:2min:51sec 
+ Test Avg. Loss: 0.037225, Accuracy: 0.283800
+Train - Epoch 57, Avg. Loss: 0.416459, Time:2min:51sec 
+ Test Avg. Loss: 0.084665, Accuracy: 0.178600
+Train - Epoch 58, Avg. Loss: 0.413710, Time:2min:51sec 
+ Test Avg. Loss: 0.036212, Accuracy: 0.410500
+Train - Epoch 59, Avg. Loss: 0.415774, Time:2min:51sec 
+ Test Avg. Loss: 0.032516, Accuracy: 0.436500
+Train - Epoch 60, Avg. Loss: 0.421811, Time:2min:51sec 
+ Test Avg. Loss: 0.074650, Accuracy: 0.188700
+Train - Epoch 61, Avg. Loss: 0.413165, Time:2min:51sec 
+ Test Avg. Loss: 0.060573, Accuracy: 0.250400
+Train - Epoch 62, Avg. Loss: 0.416262, Time:2min:51sec 
+ Test Avg. Loss: 0.048767, Accuracy: 0.336800
+Train - Epoch 63, Avg. Loss: 0.416225, Time:2min:51sec 
+ Test Avg. Loss: 0.032930, Accuracy: 0.409200
+Train - Epoch 64, Avg. Loss: 0.411863, Time:2min:51sec 
+ Test Avg. Loss: 0.052329, Accuracy: 0.193400
+Train - Epoch 65, Avg. Loss: 0.404853, Time:2min:51sec 
+ Test Avg. Loss: 0.013463, Accuracy: 0.576000
+Train - Epoch 66, Avg. Loss: 0.411106, Time:2min:51sec 
+ Test Avg. Loss: 0.050171, Accuracy: 0.302600
+Train - Epoch 67, Avg. Loss: 0.414209, Time:2min:51sec 
+ Test Avg. Loss: 0.040540, Accuracy: 0.329600
+Train - Epoch 68, Avg. Loss: 0.407836, Time:2min:51sec 
+ Test Avg. Loss: 0.044672, Accuracy: 0.280100
+Train - Epoch 69, Avg. Loss: 0.408942, Time:2min:51sec 
+ Test Avg. Loss: 0.021404, Accuracy: 0.462900
+Train - Epoch 70, Avg. Loss: 0.404843, Time:2min:51sec 
+ Test Avg. Loss: 0.018656, Accuracy: 0.553400
+Train - Epoch 71, Avg. Loss: 0.407711, Time:2min:51sec 
+ Test Avg. Loss: 0.022842, Accuracy: 0.462100
+Train - Epoch 72, Avg. Loss: 0.405022, Time:2min:51sec 
+ Test Avg. Loss: 0.039403, Accuracy: 0.297400
+Train - Epoch 73, Avg. Loss: 0.401139, Time:2min:51sec 
+ Test Avg. Loss: 0.033605, Accuracy: 0.418000
+Train - Epoch 74, Avg. Loss: 0.399424, Time:2min:51sec 
+ Test Avg. Loss: 0.022934, Accuracy: 0.471400
+Train - Epoch 75, Avg. Loss: 0.404735, Time:2min:51sec 
+ Test Avg. Loss: 0.019311, Accuracy: 0.502100
+Train - Epoch 76, Avg. Loss: 0.400420, Time:2min:51sec 
+ Test Avg. Loss: 0.014994, Accuracy: 0.579700
+Train - Epoch 77, Avg. Loss: 0.406811, Time:2min:51sec 
+ Test Avg. Loss: 0.042889, Accuracy: 0.264100
+Train - Epoch 78, Avg. Loss: 0.400245, Time:2min:51sec 
+ Test Avg. Loss: 0.024483, Accuracy: 0.443300
+Train - Epoch 79, Avg. Loss: 0.395078, Time:2min:51sec 
+ Test Avg. Loss: 0.063002, Accuracy: 0.260600
+Train - Epoch 80, Avg. Loss: 0.399988, Time:2min:51sec 
+ Test Avg. Loss: 0.024655, Accuracy: 0.522100
+Train - Epoch 81, Avg. Loss: 0.398906, Time:2min:51sec 
+ Test Avg. Loss: 0.069550, Accuracy: 0.257100
+Train - Epoch 82, Avg. Loss: 0.395653, Time:2min:51sec 
+ Test Avg. Loss: 0.079338, Accuracy: 0.171900
+Train - Epoch 83, Avg. Loss: 0.392744, Time:2min:51sec 
+ Test Avg. Loss: 0.053065, Accuracy: 0.179100
+Train - Epoch 84, Avg. Loss: 0.397087, Time:2min:51sec 
+ Test Avg. Loss: 0.026872, Accuracy: 0.404700
+Train - Epoch 85, Avg. Loss: 0.392030, Time:2min:51sec 
+ Test Avg. Loss: 0.050772, Accuracy: 0.404600
+Train - Epoch 86, Avg. Loss: 0.395224, Time:2min:51sec 
+ Test Avg. Loss: 0.031058, Accuracy: 0.408200
+Train - Epoch 87, Avg. Loss: 0.390013, Time:2min:51sec 
+ Test Avg. Loss: 0.069601, Accuracy: 0.216000
+Train - Epoch 88, Avg. Loss: 0.391378, Time:2min:51sec 
+ Test Avg. Loss: 0.028889, Accuracy: 0.415100
+Train - Epoch 89, Avg. Loss: 0.391688, Time:2min:51sec 
+ Test Avg. Loss: 0.030903, Accuracy: 0.401800
+Train - Epoch 90, Avg. Loss: 0.392833, Time:2min:51sec 
+ Test Avg. Loss: 0.025581, Accuracy: 0.497500
+Train - Epoch 91, Avg. Loss: 0.393084, Time:2min:51sec 
+ Test Avg. Loss: 0.033177, Accuracy: 0.364300
+Train - Epoch 92, Avg. Loss: 0.390426, Time:2min:51sec 
+ Test Avg. Loss: 0.025652, Accuracy: 0.441700
+Train - Epoch 93, Avg. Loss: 0.387668, Time:2min:51sec 
+ Test Avg. Loss: 0.032617, Accuracy: 0.462600
+Train - Epoch 94, Avg. Loss: 0.387926, Time:2min:51sec 
+ Test Avg. Loss: 0.027924, Accuracy: 0.391400
+Train - Epoch 95, Avg. Loss: 0.380941, Time:2min:51sec 
+ Test Avg. Loss: 0.026938, Accuracy: 0.402100
+Train - Epoch 96, Avg. Loss: 0.380182, Time:2min:51sec 
+ Test Avg. Loss: 0.048464, Accuracy: 0.402200
+Train - Epoch 97, Avg. Loss: 0.385740, Time:2min:51sec 
+ Test Avg. Loss: 0.031783, Accuracy: 0.344700
+Train - Epoch 98, Avg. Loss: 0.385581, Time:2min:51sec 
+ Test Avg. Loss: 0.027399, Accuracy: 0.417100
+Train - Epoch 99, Avg. Loss: 0.391102, Time:2min:51sec 
+ Test Avg. Loss: 0.033588, Accuracy: 0.436300
+Train - Epoch 100, Avg. Loss: 0.379452, Time:2min:51sec 
+ Test Avg. Loss: 0.016818, Accuracy: 0.535700
+Train - Epoch 101, Avg. Loss: 0.381897, Time:2min:51sec 
+ Test Avg. Loss: 0.052171, Accuracy: 0.274400
+Train - Epoch 102, Avg. Loss: 0.374152, Time:2min:51sec 
+ Test Avg. Loss: 0.046275, Accuracy: 0.250900
+Train - Epoch 103, Avg. Loss: 0.380751, Time:2min:51sec 
+ Test Avg. Loss: 0.028595, Accuracy: 0.350100
+Train - Epoch 104, Avg. Loss: 0.379746, Time:2min:51sec 
+ Test Avg. Loss: 0.026213, Accuracy: 0.415400
+Train - Epoch 105, Avg. Loss: 0.380020, Time:2min:51sec 
+ Test Avg. Loss: 0.023283, Accuracy: 0.514500
+Train - Epoch 106, Avg. Loss: 0.380403, Time:2min:51sec 
+ Test Avg. Loss: 0.052991, Accuracy: 0.325000
+Train - Epoch 107, Avg. Loss: 0.376669, Time:2min:51sec 
+ Test Avg. Loss: 0.022416, Accuracy: 0.481800
+Train - Epoch 108, Avg. Loss: 0.378251, Time:2min:51sec 
+ Test Avg. Loss: 0.033760, Accuracy: 0.380900
+Train - Epoch 109, Avg. Loss: 0.371136, Time:2min:51sec 
+ Test Avg. Loss: 0.028519, Accuracy: 0.488500
+Train - Epoch 110, Avg. Loss: 0.367743, Time:2min:51sec 
+ Test Avg. Loss: 0.021825, Accuracy: 0.537500
+Train - Epoch 111, Avg. Loss: 0.375203, Time:2min:51sec 
+ Test Avg. Loss: 0.026805, Accuracy: 0.402200
+Train - Epoch 112, Avg. Loss: 0.371220, Time:2min:51sec 
+ Test Avg. Loss: 0.015886, Accuracy: 0.566400
+Train - Epoch 113, Avg. Loss: 0.368912, Time:2min:51sec 
+ Test Avg. Loss: 0.020267, Accuracy: 0.523500
+Train - Epoch 114, Avg. Loss: 0.370235, Time:2min:51sec 
+ Test Avg. Loss: 0.032782, Accuracy: 0.423000
+Train - Epoch 115, Avg. Loss: 0.369341, Time:2min:51sec 
+ Test Avg. Loss: 0.046054, Accuracy: 0.359000
+Train - Epoch 116, Avg. Loss: 0.367514, Time:2min:51sec 
+ Test Avg. Loss: 0.020133, Accuracy: 0.588600
+Train - Epoch 117, Avg. Loss: 0.372471, Time:2min:51sec 
+ Test Avg. Loss: 0.024278, Accuracy: 0.511800
+Train - Epoch 118, Avg. Loss: 0.367251, Time:2min:51sec 
+ Test Avg. Loss: 0.022426, Accuracy: 0.494000
+Train - Epoch 119, Avg. Loss: 0.369819, Time:2min:51sec 
+ Test Avg. Loss: 0.017176, Accuracy: 0.530600
+Train - Epoch 120, Avg. Loss: 0.372184, Time:2min:51sec 
+ Test Avg. Loss: 0.023531, Accuracy: 0.559600
+Train - Epoch 121, Avg. Loss: 0.367290, Time:2min:51sec 
+ Test Avg. Loss: 0.016936, Accuracy: 0.588500
+Train - Epoch 122, Avg. Loss: 0.367115, Time:2min:51sec 
+ Test Avg. Loss: 0.019342, Accuracy: 0.497000
+Train - Epoch 123, Avg. Loss: 0.366009, Time:2min:51sec 
+ Test Avg. Loss: 0.014024, Accuracy: 0.625200
+Train - Epoch 124, Avg. Loss: 0.356630, Time:2min:51sec 
+ Test Avg. Loss: 0.022353, Accuracy: 0.478700
+Train - Epoch 125, Avg. Loss: 0.361075, Time:2min:51sec 
+ Test Avg. Loss: 0.011936, Accuracy: 0.658800
+Train - Epoch 126, Avg. Loss: 0.360089, Time:2min:51sec 
+ Test Avg. Loss: 0.032170, Accuracy: 0.361100
+Train - Epoch 127, Avg. Loss: 0.365859, Time:2min:51sec 
+ Test Avg. Loss: 0.068665, Accuracy: 0.209600
+Train - Epoch 128, Avg. Loss: 0.363130, Time:2min:51sec 
+ Test Avg. Loss: 0.019962, Accuracy: 0.486600
+Train - Epoch 129, Avg. Loss: 0.361693, Time:2min:51sec 
+ Test Avg. Loss: 0.020955, Accuracy: 0.580200
+Train - Epoch 130, Avg. Loss: 0.359191, Time:2min:51sec 
+ Test Avg. Loss: 0.021034, Accuracy: 0.452800
+Train - Epoch 131, Avg. Loss: 0.358734, Time:2min:51sec 
+ Test Avg. Loss: 0.017833, Accuracy: 0.520400
+Train - Epoch 132, Avg. Loss: 0.359128, Time:2min:51sec 
+ Test Avg. Loss: 0.027363, Accuracy: 0.450400
+Train - Epoch 133, Avg. Loss: 0.361964, Time:2min:51sec 
+ Test Avg. Loss: 0.013541, Accuracy: 0.617900
+Train - Epoch 134, Avg. Loss: 0.355021, Time:2min:51sec 
+ Test Avg. Loss: 0.031866, Accuracy: 0.354600
+Train - Epoch 135, Avg. Loss: 0.356023, Time:2min:51sec 
+ Test Avg. Loss: 0.011248, Accuracy: 0.678500
+Train - Epoch 136, Avg. Loss: 0.354971, Time:2min:51sec 
+ Test Avg. Loss: 0.028684, Accuracy: 0.437200
+Train - Epoch 137, Avg. Loss: 0.351370, Time:2min:51sec 
+ Test Avg. Loss: 0.027415, Accuracy: 0.480700
+Train - Epoch 138, Avg. Loss: 0.355312, Time:2min:51sec 
+ Test Avg. Loss: 0.022621, Accuracy: 0.450000
+Train - Epoch 139, Avg. Loss: 0.353799, Time:2min:51sec 
+ Test Avg. Loss: 0.050857, Accuracy: 0.346700
+Train - Epoch 140, Avg. Loss: 0.353640, Time:2min:51sec 
+ Test Avg. Loss: 0.020738, Accuracy: 0.555100
+Train - Epoch 141, Avg. Loss: 0.353394, Time:2min:51sec 
+ Test Avg. Loss: 0.043625, Accuracy: 0.370500
+Train - Epoch 142, Avg. Loss: 0.354442, Time:2min:51sec 
+ Test Avg. Loss: 0.017878, Accuracy: 0.631400
+Train - Epoch 143, Avg. Loss: 0.349008, Time:2min:51sec 
+ Test Avg. Loss: 0.023921, Accuracy: 0.518700
+Train - Epoch 144, Avg. Loss: 0.350990, Time:2min:51sec 
+ Test Avg. Loss: 0.027570, Accuracy: 0.447100
+Train - Epoch 145, Avg. Loss: 0.347885, Time:2min:51sec 
+ Test Avg. Loss: 0.014142, Accuracy: 0.599900
+Train - Epoch 146, Avg. Loss: 0.350721, Time:2min:51sec 
+ Test Avg. Loss: 0.031494, Accuracy: 0.441100
+Train - Epoch 147, Avg. Loss: 0.343351, Time:2min:51sec 
+ Test Avg. Loss: 0.015518, Accuracy: 0.601500
+Train - Epoch 148, Avg. Loss: 0.346110, Time:2min:51sec 
+ Test Avg. Loss: 0.023461, Accuracy: 0.506600
+Train - Epoch 149, Avg. Loss: 0.339798, Time:2min:51sec 
+ Test Avg. Loss: 0.009100, Accuracy: 0.716400
+Train - Epoch 150, Avg. Loss: 0.344120, Time:2min:51sec 
+ Test Avg. Loss: 0.011543, Accuracy: 0.687300
+Train - Epoch 151, Avg. Loss: 0.342484, Time:2min:51sec 
+ Test Avg. Loss: 0.010760, Accuracy: 0.678300
+Train - Epoch 152, Avg. Loss: 0.341192, Time:2min:51sec 
+ Test Avg. Loss: 0.015843, Accuracy: 0.601000
+Train - Epoch 153, Avg. Loss: 0.340807, Time:2min:51sec 
+ Test Avg. Loss: 0.007447, Accuracy: 0.767800
+Train - Epoch 154, Avg. Loss: 0.334623, Time:2min:51sec 
+ Test Avg. Loss: 0.009143, Accuracy: 0.722500
+Train - Epoch 155, Avg. Loss: 0.338001, Time:2min:51sec 
+ Test Avg. Loss: 0.012419, Accuracy: 0.669200
+Train - Epoch 156, Avg. Loss: 0.338543, Time:2min:51sec 
+ Test Avg. Loss: 0.012833, Accuracy: 0.637900
+Train - Epoch 157, Avg. Loss: 0.335157, Time:2min:51sec 
+ Test Avg. Loss: 0.012954, Accuracy: 0.674300
+Train - Epoch 158, Avg. Loss: 0.336628, Time:2min:51sec 
+ Test Avg. Loss: 0.014494, Accuracy: 0.631900
+Train - Epoch 159, Avg. Loss: 0.332510, Time:2min:51sec 
+ Test Avg. Loss: 0.017294, Accuracy: 0.589200
+Train - Epoch 160, Avg. Loss: 0.334244, Time:2min:51sec 
+ Test Avg. Loss: 0.026458, Accuracy: 0.477900
+Train - Epoch 161, Avg. Loss: 0.330375, Time:2min:51sec 
+ Test Avg. Loss: 0.010470, Accuracy: 0.706000
+Train - Epoch 162, Avg. Loss: 0.333517, Time:2min:51sec 
+ Test Avg. Loss: 0.015189, Accuracy: 0.583700
+Train - Epoch 163, Avg. Loss: 0.330819, Time:2min:51sec 
+ Test Avg. Loss: 0.032211, Accuracy: 0.447600
+Train - Epoch 164, Avg. Loss: 0.330048, Time:2min:51sec 
+ Test Avg. Loss: 0.009793, Accuracy: 0.718600
+Train - Epoch 165, Avg. Loss: 0.327986, Time:2min:51sec 
+ Test Avg. Loss: 0.019542, Accuracy: 0.514900
+Train - Epoch 166, Avg. Loss: 0.330711, Time:2min:51sec 
+ Test Avg. Loss: 0.011472, Accuracy: 0.689800
+Train - Epoch 167, Avg. Loss: 0.326451, Time:2min:51sec 
+ Test Avg. Loss: 0.021019, Accuracy: 0.522900
+Train - Epoch 168, Avg. Loss: 0.329028, Time:2min:51sec 
+ Test Avg. Loss: 0.014792, Accuracy: 0.653300
+Train - Epoch 169, Avg. Loss: 0.329542, Time:2min:51sec 
+ Test Avg. Loss: 0.014678, Accuracy: 0.601800
+Train - Epoch 170, Avg. Loss: 0.327229, Time:2min:51sec 
+ Test Avg. Loss: 0.017783, Accuracy: 0.581500
+Train - Epoch 171, Avg. Loss: 0.322627, Time:2min:51sec 
+ Test Avg. Loss: 0.010758, Accuracy: 0.702800
+Train - Epoch 172, Avg. Loss: 0.321797, Time:2min:51sec 
+ Test Avg. Loss: 0.013967, Accuracy: 0.625100
+Train - Epoch 173, Avg. Loss: 0.323032, Time:2min:51sec 
+ Test Avg. Loss: 0.023226, Accuracy: 0.482300
+Train - Epoch 174, Avg. Loss: 0.322491, Time:2min:51sec 
+ Test Avg. Loss: 0.043324, Accuracy: 0.293300
+Train - Epoch 175, Avg. Loss: 0.315325, Time:2min:51sec 
+ Test Avg. Loss: 0.026085, Accuracy: 0.542400
+Train - Epoch 176, Avg. Loss: 0.318926, Time:2min:51sec 
+ Test Avg. Loss: 0.017291, Accuracy: 0.560900
+Train - Epoch 177, Avg. Loss: 0.320702, Time:2min:51sec 
+ Test Avg. Loss: 0.012297, Accuracy: 0.679800
+Train - Epoch 178, Avg. Loss: 0.321948, Time:2min:51sec 
+ Test Avg. Loss: 0.010809, Accuracy: 0.678800
+Train - Epoch 179, Avg. Loss: 0.312967, Time:2min:51sec 
+ Test Avg. Loss: 0.011724, Accuracy: 0.690600
+Train - Epoch 180, Avg. Loss: 0.317426, Time:2min:51sec 
+ Test Avg. Loss: 0.013875, Accuracy: 0.651500
+Train - Epoch 181, Avg. Loss: 0.313567, Time:2min:51sec 
+ Test Avg. Loss: 0.017459, Accuracy: 0.598700
+Train - Epoch 182, Avg. Loss: 0.311029, Time:2min:51sec 
+ Test Avg. Loss: 0.014849, Accuracy: 0.621400
+Train - Epoch 183, Avg. Loss: 0.306757, Time:2min:51sec 
+ Test Avg. Loss: 0.040072, Accuracy: 0.355400
+Train - Epoch 184, Avg. Loss: 0.316402, Time:2min:51sec 
+ Test Avg. Loss: 0.011867, Accuracy: 0.651000
+Train - Epoch 185, Avg. Loss: 0.310565, Time:2min:51sec 
+ Test Avg. Loss: 0.034204, Accuracy: 0.400800
+Train - Epoch 186, Avg. Loss: 0.310252, Time:2min:51sec 
+ Test Avg. Loss: 0.008262, Accuracy: 0.746100
+Train - Epoch 187, Avg. Loss: 0.311812, Time:2min:51sec 
+ Test Avg. Loss: 0.012127, Accuracy: 0.663400
+Train - Epoch 188, Avg. Loss: 0.306922, Time:2min:51sec 
+ Test Avg. Loss: 0.020195, Accuracy: 0.511900
+Train - Epoch 189, Avg. Loss: 0.309299, Time:2min:51sec 
+ Test Avg. Loss: 0.012374, Accuracy: 0.669500
+Train - Epoch 190, Avg. Loss: 0.301679, Time:2min:51sec 
+ Test Avg. Loss: 0.009922, Accuracy: 0.704700
+Train - Epoch 191, Avg. Loss: 0.305678, Time:2min:51sec 
+ Test Avg. Loss: 0.010357, Accuracy: 0.711900
+Train - Epoch 192, Avg. Loss: 0.304537, Time:2min:51sec 
+ Test Avg. Loss: 0.014450, Accuracy: 0.628200
+Train - Epoch 193, Avg. Loss: 0.304454, Time:2min:51sec 
+ Test Avg. Loss: 0.020253, Accuracy: 0.586600
+Train - Epoch 194, Avg. Loss: 0.304079, Time:2min:51sec 
+ Test Avg. Loss: 0.021277, Accuracy: 0.520200
+Train - Epoch 195, Avg. Loss: 0.302162, Time:2min:51sec 
+ Test Avg. Loss: 0.020993, Accuracy: 0.556800
+Train - Epoch 196, Avg. Loss: 0.297405, Time:2min:51sec 
+ Test Avg. Loss: 0.022135, Accuracy: 0.488300
+Train - Epoch 197, Avg. Loss: 0.298667, Time:2min:51sec 
+ Test Avg. Loss: 0.009587, Accuracy: 0.728000
+Train - Epoch 198, Avg. Loss: 0.297378, Time:2min:51sec 
+ Test Avg. Loss: 0.010677, Accuracy: 0.713200
+Train - Epoch 199, Avg. Loss: 0.295963, Time:2min:51sec 
+ Test Avg. Loss: 0.009544, Accuracy: 0.727600
+Train - Epoch 200, Avg. Loss: 0.296057, Time:2min:51sec 
+ Test Avg. Loss: 0.007329, Accuracy: 0.774600
+Train - Epoch 201, Avg. Loss: 0.296757, Time:2min:51sec 
+ Test Avg. Loss: 0.016012, Accuracy: 0.615800
+Train - Epoch 202, Avg. Loss: 0.295635, Time:2min:51sec 
+ Test Avg. Loss: 0.038753, Accuracy: 0.417700
+Train - Epoch 203, Avg. Loss: 0.297264, Time:2min:51sec 
+ Test Avg. Loss: 0.008236, Accuracy: 0.765500
+Train - Epoch 204, Avg. Loss: 0.292140, Time:2min:51sec 
+ Test Avg. Loss: 0.019809, Accuracy: 0.533600
+Train - Epoch 205, Avg. Loss: 0.294603, Time:2min:51sec 
+ Test Avg. Loss: 0.013396, Accuracy: 0.659900
+Train - Epoch 206, Avg. Loss: 0.288491, Time:2min:51sec 
+ Test Avg. Loss: 0.012191, Accuracy: 0.622300
+Train - Epoch 207, Avg. Loss: 0.289928, Time:2min:51sec 
+ Test Avg. Loss: 0.016300, Accuracy: 0.640800
+Train - Epoch 208, Avg. Loss: 0.287080, Time:2min:51sec 
+ Test Avg. Loss: 0.027410, Accuracy: 0.443400
+Train - Epoch 209, Avg. Loss: 0.283204, Time:2min:51sec 
+ Test Avg. Loss: 0.010008, Accuracy: 0.689800
+Train - Epoch 210, Avg. Loss: 0.284044, Time:2min:51sec 
+ Test Avg. Loss: 0.017608, Accuracy: 0.598100
+Train - Epoch 211, Avg. Loss: 0.281507, Time:2min:51sec 
+ Test Avg. Loss: 0.011271, Accuracy: 0.670500
+Train - Epoch 212, Avg. Loss: 0.276690, Time:2min:51sec 
+ Test Avg. Loss: 0.011625, Accuracy: 0.693100
+Train - Epoch 213, Avg. Loss: 0.281901, Time:2min:51sec 
+ Test Avg. Loss: 0.009856, Accuracy: 0.744500
+Train - Epoch 214, Avg. Loss: 0.278787, Time:2min:51sec 
+ Test Avg. Loss: 0.012574, Accuracy: 0.669400
+Train - Epoch 215, Avg. Loss: 0.274812, Time:2min:51sec 
+ Test Avg. Loss: 0.008133, Accuracy: 0.767800
+Train - Epoch 216, Avg. Loss: 0.276877, Time:2min:51sec 
+ Test Avg. Loss: 0.010977, Accuracy: 0.690000
+Train - Epoch 217, Avg. Loss: 0.279669, Time:2min:51sec 
+ Test Avg. Loss: 0.010780, Accuracy: 0.719900
+Train - Epoch 218, Avg. Loss: 0.271104, Time:2min:51sec 
+ Test Avg. Loss: 0.011145, Accuracy: 0.707700
+Train - Epoch 219, Avg. Loss: 0.277439, Time:2min:51sec 
+ Test Avg. Loss: 0.009631, Accuracy: 0.740000
+Train - Epoch 220, Avg. Loss: 0.270685, Time:2min:51sec 
+ Test Avg. Loss: 0.008271, Accuracy: 0.766300
+Train - Epoch 221, Avg. Loss: 0.270723, Time:2min:51sec 
+ Test Avg. Loss: 0.007613, Accuracy: 0.784000
+Train - Epoch 222, Avg. Loss: 0.271087, Time:2min:51sec 
+ Test Avg. Loss: 0.007216, Accuracy: 0.779300
+Train - Epoch 223, Avg. Loss: 0.268738, Time:2min:51sec 
+ Test Avg. Loss: 0.008681, Accuracy: 0.765200
+Train - Epoch 224, Avg. Loss: 0.268871, Time:2min:51sec 
+ Test Avg. Loss: 0.007396, Accuracy: 0.779100
+Train - Epoch 225, Avg. Loss: 0.263416, Time:2min:51sec 
+ Test Avg. Loss: 0.025847, Accuracy: 0.514400
+Train - Epoch 226, Avg. Loss: 0.267451, Time:2min:51sec 
+ Test Avg. Loss: 0.010061, Accuracy: 0.720600
+Train - Epoch 227, Avg. Loss: 0.267160, Time:2min:51sec 
+ Test Avg. Loss: 0.006534, Accuracy: 0.800500
+Train - Epoch 228, Avg. Loss: 0.258552, Time:2min:51sec 
+ Test Avg. Loss: 0.010310, Accuracy: 0.735600
+Train - Epoch 229, Avg. Loss: 0.262139, Time:2min:51sec 
+ Test Avg. Loss: 0.010284, Accuracy: 0.696300
+Train - Epoch 230, Avg. Loss: 0.261549, Time:2min:51sec 
+ Test Avg. Loss: 0.008255, Accuracy: 0.762700
+Train - Epoch 231, Avg. Loss: 0.255324, Time:2min:51sec 
+ Test Avg. Loss: 0.006128, Accuracy: 0.830200
+Train - Epoch 232, Avg. Loss: 0.260393, Time:2min:51sec 
+ Test Avg. Loss: 0.005837, Accuracy: 0.817000
+Train - Epoch 233, Avg. Loss: 0.254984, Time:2min:51sec 
+ Test Avg. Loss: 0.010512, Accuracy: 0.735900
+Train - Epoch 234, Avg. Loss: 0.250985, Time:2min:51sec 
+ Test Avg. Loss: 0.014425, Accuracy: 0.633200
+Train - Epoch 235, Avg. Loss: 0.249733, Time:2min:51sec 
+ Test Avg. Loss: 0.006985, Accuracy: 0.780300
+Train - Epoch 236, Avg. Loss: 0.252206, Time:2min:51sec 
+ Test Avg. Loss: 0.007221, Accuracy: 0.791300
+Train - Epoch 237, Avg. Loss: 0.250119, Time:2min:51sec 
+ Test Avg. Loss: 0.006845, Accuracy: 0.805800
+Train - Epoch 238, Avg. Loss: 0.253353, Time:2min:51sec 
+ Test Avg. Loss: 0.008876, Accuracy: 0.762700
+Train - Epoch 239, Avg. Loss: 0.246529, Time:2min:51sec 
+ Test Avg. Loss: 0.007918, Accuracy: 0.778400
+Train - Epoch 240, Avg. Loss: 0.252025, Time:2min:51sec 
+ Test Avg. Loss: 0.008601, Accuracy: 0.757600
+Train - Epoch 241, Avg. Loss: 0.247112, Time:2min:51sec 
+ Test Avg. Loss: 0.005771, Accuracy: 0.834500
+Train - Epoch 242, Avg. Loss: 0.245757, Time:2min:51sec 
+ Test Avg. Loss: 0.004470, Accuracy: 0.856900
+Train - Epoch 243, Avg. Loss: 0.244909, Time:2min:51sec 
+ Test Avg. Loss: 0.007043, Accuracy: 0.801500
+Train - Epoch 244, Avg. Loss: 0.239548, Time:2min:51sec 
+ Test Avg. Loss: 0.010029, Accuracy: 0.753900
+Train - Epoch 245, Avg. Loss: 0.234981, Time:2min:51sec 
+ Test Avg. Loss: 0.006508, Accuracy: 0.795900
+Train - Epoch 246, Avg. Loss: 0.238011, Time:2min:51sec 
+ Test Avg. Loss: 0.006774, Accuracy: 0.804200
+Train - Epoch 247, Avg. Loss: 0.236952, Time:2min:51sec 
+ Test Avg. Loss: 0.011034, Accuracy: 0.733700
+Train - Epoch 248, Avg. Loss: 0.235150, Time:2min:51sec 
+ Test Avg. Loss: 0.016233, Accuracy: 0.633400
+Train - Epoch 249, Avg. Loss: 0.235439, Time:2min:51sec 
+ Test Avg. Loss: 0.006748, Accuracy: 0.804600
+Train - Epoch 250, Avg. Loss: 0.235067, Time:2min:51sec 
+ Test Avg. Loss: 0.009564, Accuracy: 0.764300
+Train - Epoch 251, Avg. Loss: 0.231214, Time:2min:51sec 
+ Test Avg. Loss: 0.006827, Accuracy: 0.810300
+Train - Epoch 252, Avg. Loss: 0.230218, Time:2min:51sec 
+ Test Avg. Loss: 0.006440, Accuracy: 0.805400
+Train - Epoch 253, Avg. Loss: 0.231206, Time:2min:51sec 
+ Test Avg. Loss: 0.009694, Accuracy: 0.762900
+Train - Epoch 254, Avg. Loss: 0.227602, Time:2min:51sec 
+ Test Avg. Loss: 0.007017, Accuracy: 0.801800
+Train - Epoch 255, Avg. Loss: 0.224346, Time:2min:51sec 
+ Test Avg. Loss: 0.006836, Accuracy: 0.809300
+Train - Epoch 256, Avg. Loss: 0.229515, Time:2min:51sec 
+ Test Avg. Loss: 0.010630, Accuracy: 0.721400
+Train - Epoch 257, Avg. Loss: 0.220548, Time:2min:51sec 
+ Test Avg. Loss: 0.005462, Accuracy: 0.830500
+Train - Epoch 258, Avg. Loss: 0.222672, Time:2min:51sec 
+ Test Avg. Loss: 0.005864, Accuracy: 0.827900
+Train - Epoch 259, Avg. Loss: 0.218492, Time:2min:51sec 
+ Test Avg. Loss: 0.005455, Accuracy: 0.845200
+Train - Epoch 260, Avg. Loss: 0.219183, Time:2min:51sec 
+ Test Avg. Loss: 0.007920, Accuracy: 0.786200
+Train - Epoch 261, Avg. Loss: 0.218164, Time:2min:51sec 
+ Test Avg. Loss: 0.011569, Accuracy: 0.706700
+Train - Epoch 262, Avg. Loss: 0.215117, Time:2min:51sec 
+ Test Avg. Loss: 0.009411, Accuracy: 0.759000
+Train - Epoch 263, Avg. Loss: 0.217397, Time:2min:51sec 
+ Test Avg. Loss: 0.008193, Accuracy: 0.781700
+Train - Epoch 264, Avg. Loss: 0.211474, Time:2min:51sec 
+ Test Avg. Loss: 0.006084, Accuracy: 0.832000
+Train - Epoch 265, Avg. Loss: 0.209928, Time:2min:51sec 
+ Test Avg. Loss: 0.005232, Accuracy: 0.842300
+Train - Epoch 266, Avg. Loss: 0.206545, Time:2min:51sec 
+ Test Avg. Loss: 0.007737, Accuracy: 0.785300
+Train - Epoch 267, Avg. Loss: 0.207859, Time:2min:51sec 
+ Test Avg. Loss: 0.005295, Accuracy: 0.847300
+Train - Epoch 268, Avg. Loss: 0.210041, Time:2min:51sec 
+ Test Avg. Loss: 0.005319, Accuracy: 0.849000
+Train - Epoch 269, Avg. Loss: 0.202623, Time:2min:51sec 
+ Test Avg. Loss: 0.006159, Accuracy: 0.819400
+Train - Epoch 270, Avg. Loss: 0.200322, Time:2min:51sec 
+ Test Avg. Loss: 0.005194, Accuracy: 0.841900
+Train - Epoch 271, Avg. Loss: 0.201490, Time:2min:51sec 
+ Test Avg. Loss: 0.005844, Accuracy: 0.834300
+Train - Epoch 272, Avg. Loss: 0.199122, Time:2min:51sec 
+ Test Avg. Loss: 0.010334, Accuracy: 0.744500
+Train - Epoch 273, Avg. Loss: 0.202097, Time:2min:51sec 
+ Test Avg. Loss: 0.006095, Accuracy: 0.826600
+Train - Epoch 274, Avg. Loss: 0.197130, Time:2min:51sec 
+ Test Avg. Loss: 0.009183, Accuracy: 0.776300
+Train - Epoch 275, Avg. Loss: 0.196516, Time:2min:51sec 
+ Test Avg. Loss: 0.009485, Accuracy: 0.776500
+Train - Epoch 276, Avg. Loss: 0.196844, Time:2min:51sec 
+ Test Avg. Loss: 0.004005, Accuracy: 0.875900
+Train - Epoch 277, Avg. Loss: 0.192160, Time:2min:51sec 
+ Test Avg. Loss: 0.005506, Accuracy: 0.846000
+Train - Epoch 278, Avg. Loss: 0.188846, Time:2min:51sec 
+ Test Avg. Loss: 0.010013, Accuracy: 0.743700
+Train - Epoch 279, Avg. Loss: 0.191645, Time:2min:51sec 
+ Test Avg. Loss: 0.004524, Accuracy: 0.863700
+Train - Epoch 280, Avg. Loss: 0.188995, Time:2min:51sec 
+ Test Avg. Loss: 0.005781, Accuracy: 0.834700
+Train - Epoch 281, Avg. Loss: 0.187169, Time:2min:51sec 
+ Test Avg. Loss: 0.005664, Accuracy: 0.838600
+Train - Epoch 282, Avg. Loss: 0.185163, Time:2min:51sec 
+ Test Avg. Loss: 0.004623, Accuracy: 0.856400
+Train - Epoch 283, Avg. Loss: 0.184518, Time:2min:51sec 
+ Test Avg. Loss: 0.006943, Accuracy: 0.817400
+Train - Epoch 284, Avg. Loss: 0.183470, Time:2min:51sec 
+ Test Avg. Loss: 0.008753, Accuracy: 0.791200
+Train - Epoch 285, Avg. Loss: 0.176346, Time:2min:51sec 
+ Test Avg. Loss: 0.005070, Accuracy: 0.856300
+Train - Epoch 286, Avg. Loss: 0.180178, Time:2min:51sec 
+ Test Avg. Loss: 0.005295, Accuracy: 0.847500
+Train - Epoch 287, Avg. Loss: 0.177619, Time:2min:51sec 
+ Test Avg. Loss: 0.004864, Accuracy: 0.859200
+Train - Epoch 288, Avg. Loss: 0.177221, Time:2min:51sec 
+ Test Avg. Loss: 0.006160, Accuracy: 0.824900
+Train - Epoch 289, Avg. Loss: 0.173324, Time:2min:51sec 
+ Test Avg. Loss: 0.004177, Accuracy: 0.874300
+Train - Epoch 290, Avg. Loss: 0.171275, Time:2min:51sec 
+ Test Avg. Loss: 0.004182, Accuracy: 0.874900
+Train - Epoch 291, Avg. Loss: 0.169140, Time:2min:51sec 
+ Test Avg. Loss: 0.005134, Accuracy: 0.852100
+Train - Epoch 292, Avg. Loss: 0.166737, Time:2min:51sec 
+ Test Avg. Loss: 0.006803, Accuracy: 0.805000
+Train - Epoch 293, Avg. Loss: 0.168279, Time:2min:51sec 
+ Test Avg. Loss: 0.004291, Accuracy: 0.875100
+Train - Epoch 294, Avg. Loss: 0.163273, Time:2min:51sec 
+ Test Avg. Loss: 0.006060, Accuracy: 0.832500
+Train - Epoch 295, Avg. Loss: 0.162449, Time:2min:51sec 
+ Test Avg. Loss: 0.006566, Accuracy: 0.828000
+Train - Epoch 296, Avg. Loss: 0.162517, Time:2min:51sec 
+ Test Avg. Loss: 0.005522, Accuracy: 0.843300
+Train - Epoch 297, Avg. Loss: 0.156449, Time:2min:51sec 
+ Test Avg. Loss: 0.005232, Accuracy: 0.862800
+Train - Epoch 298, Avg. Loss: 0.158904, Time:2min:51sec 
+ Test Avg. Loss: 0.004929, Accuracy: 0.860500
+Train - Epoch 299, Avg. Loss: 0.154334, Time:2min:51sec 
+ Test Avg. Loss: 0.006655, Accuracy: 0.822300
+Train - Epoch 300, Avg. Loss: 0.152648, Time:2min:51sec 
+ Test Avg. Loss: 0.003983, Accuracy: 0.876900
+Train - Epoch 301, Avg. Loss: 0.153963, Time:2min:51sec 
+ Test Avg. Loss: 0.005563, Accuracy: 0.843700
+Train - Epoch 302, Avg. Loss: 0.147796, Time:2min:51sec 
+ Test Avg. Loss: 0.004389, Accuracy: 0.871300
+Train - Epoch 303, Avg. Loss: 0.149187, Time:2min:51sec 
+ Test Avg. Loss: 0.005797, Accuracy: 0.844100
+Train - Epoch 304, Avg. Loss: 0.146671, Time:2min:51sec 
+ Test Avg. Loss: 0.004372, Accuracy: 0.871500
+Train - Epoch 305, Avg. Loss: 0.144778, Time:2min:51sec 
+ Test Avg. Loss: 0.005108, Accuracy: 0.853800
+Train - Epoch 306, Avg. Loss: 0.144511, Time:2min:51sec 
+ Test Avg. Loss: 0.005272, Accuracy: 0.856800
+Train - Epoch 307, Avg. Loss: 0.140993, Time:2min:51sec 
+ Test Avg. Loss: 0.005150, Accuracy: 0.853500
+Train - Epoch 308, Avg. Loss: 0.135851, Time:2min:51sec 
+ Test Avg. Loss: 0.004897, Accuracy: 0.868000
+Train - Epoch 309, Avg. Loss: 0.137967, Time:2min:51sec 
+ Test Avg. Loss: 0.004752, Accuracy: 0.866500
+Train - Epoch 310, Avg. Loss: 0.133589, Time:2min:51sec 
+ Test Avg. Loss: 0.004790, Accuracy: 0.864400
+Train - Epoch 311, Avg. Loss: 0.133399, Time:2min:51sec 
+ Test Avg. Loss: 0.004080, Accuracy: 0.882400
+Train - Epoch 312, Avg. Loss: 0.129133, Time:2min:51sec 
+ Test Avg. Loss: 0.004854, Accuracy: 0.860100
+Train - Epoch 313, Avg. Loss: 0.126781, Time:2min:51sec 
+ Test Avg. Loss: 0.004276, Accuracy: 0.879200
+Train - Epoch 314, Avg. Loss: 0.131902, Time:2min:51sec 
+ Test Avg. Loss: 0.003743, Accuracy: 0.890700
+Train - Epoch 315, Avg. Loss: 0.124657, Time:2min:51sec 
+ Test Avg. Loss: 0.003770, Accuracy: 0.888800
+Train - Epoch 316, Avg. Loss: 0.124804, Time:2min:51sec 
+ Test Avg. Loss: 0.003801, Accuracy: 0.887600
+Train - Epoch 317, Avg. Loss: 0.121444, Time:2min:51sec 
+ Test Avg. Loss: 0.005249, Accuracy: 0.856600
+Train - Epoch 318, Avg. Loss: 0.117304, Time:2min:51sec 
+ Test Avg. Loss: 0.005397, Accuracy: 0.857300
+Train - Epoch 319, Avg. Loss: 0.117458, Time:2min:51sec 
+ Test Avg. Loss: 0.003956, Accuracy: 0.890700
+Train - Epoch 320, Avg. Loss: 0.117150, Time:2min:51sec 
+ Test Avg. Loss: 0.004322, Accuracy: 0.879900
+Train - Epoch 321, Avg. Loss: 0.113986, Time:2min:51sec 
+ Test Avg. Loss: 0.003769, Accuracy: 0.890600
+Train - Epoch 322, Avg. Loss: 0.112740, Time:2min:51sec 
+ Test Avg. Loss: 0.003955, Accuracy: 0.886600
+Train - Epoch 323, Avg. Loss: 0.111261, Time:2min:51sec 
+ Test Avg. Loss: 0.003786, Accuracy: 0.895400
+Train - Epoch 324, Avg. Loss: 0.106947, Time:2min:51sec 
+ Test Avg. Loss: 0.004394, Accuracy: 0.882000
+Train - Epoch 325, Avg. Loss: 0.109700, Time:2min:51sec 
+ Test Avg. Loss: 0.003807, Accuracy: 0.893800
+Train - Epoch 326, Avg. Loss: 0.103904, Time:2min:51sec 
+ Test Avg. Loss: 0.004176, Accuracy: 0.877600
+Train - Epoch 327, Avg. Loss: 0.099547, Time:2min:51sec 
+ Test Avg. Loss: 0.004287, Accuracy: 0.883000
+Train - Epoch 328, Avg. Loss: 0.101176, Time:2min:51sec 
+ Test Avg. Loss: 0.004248, Accuracy: 0.882800
+Train - Epoch 329, Avg. Loss: 0.100207, Time:2min:51sec 
+ Test Avg. Loss: 0.003913, Accuracy: 0.891500
+Train - Epoch 330, Avg. Loss: 0.096645, Time:2min:51sec 
+ Test Avg. Loss: 0.003988, Accuracy: 0.888300
+Train - Epoch 331, Avg. Loss: 0.097831, Time:2min:51sec 
+ Test Avg. Loss: 0.003494, Accuracy: 0.898300
+Train - Epoch 332, Avg. Loss: 0.098293, Time:2min:51sec 
+ Test Avg. Loss: 0.004062, Accuracy: 0.886700
+Train - Epoch 333, Avg. Loss: 0.090443, Time:2min:51sec 
+ Test Avg. Loss: 0.004210, Accuracy: 0.878100
+Train - Epoch 334, Avg. Loss: 0.089093, Time:2min:51sec 
+ Test Avg. Loss: 0.003716, Accuracy: 0.896500
+Train - Epoch 335, Avg. Loss: 0.089679, Time:2min:51sec 
+ Test Avg. Loss: 0.004058, Accuracy: 0.893500
+Train - Epoch 336, Avg. Loss: 0.086208, Time:2min:51sec 
+ Test Avg. Loss: 0.004225, Accuracy: 0.881000
+Train - Epoch 337, Avg. Loss: 0.085588, Time:2min:51sec 
+ Test Avg. Loss: 0.003733, Accuracy: 0.896100
+Train - Epoch 338, Avg. Loss: 0.083071, Time:2min:51sec 
+ Test Avg. Loss: 0.003893, Accuracy: 0.893100
+Train - Epoch 339, Avg. Loss: 0.082148, Time:2min:51sec 
+ Test Avg. Loss: 0.003982, Accuracy: 0.886800
+Train - Epoch 340, Avg. Loss: 0.077787, Time:2min:51sec 
+ Test Avg. Loss: 0.003789, Accuracy: 0.897500
+Train - Epoch 341, Avg. Loss: 0.079836, Time:2min:51sec 
+ Test Avg. Loss: 0.003532, Accuracy: 0.899700
+Train - Epoch 342, Avg. Loss: 0.075793, Time:2min:51sec 
+ Test Avg. Loss: 0.003624, Accuracy: 0.895400
+Train - Epoch 343, Avg. Loss: 0.074417, Time:2min:51sec 
+ Test Avg. Loss: 0.003898, Accuracy: 0.894300
+Train - Epoch 344, Avg. Loss: 0.072835, Time:2min:51sec 
+ Test Avg. Loss: 0.003994, Accuracy: 0.893200
+Train - Epoch 345, Avg. Loss: 0.070287, Time:2min:51sec 
+ Test Avg. Loss: 0.003757, Accuracy: 0.896200
+Train - Epoch 346, Avg. Loss: 0.069008, Time:2min:51sec 
+ Test Avg. Loss: 0.003904, Accuracy: 0.901200
+Train - Epoch 347, Avg. Loss: 0.066866, Time:2min:51sec 
+ Test Avg. Loss: 0.003520, Accuracy: 0.901300
+Train - Epoch 348, Avg. Loss: 0.064760, Time:2min:51sec 
+ Test Avg. Loss: 0.003615, Accuracy: 0.900300
+Train - Epoch 349, Avg. Loss: 0.064260, Time:2min:51sec 
+ Test Avg. Loss: 0.003637, Accuracy: 0.902100
+Train - Epoch 350, Avg. Loss: 0.062096, Time:2min:51sec 
+ Test Avg. Loss: 0.003613, Accuracy: 0.899000
+Train - Epoch 351, Avg. Loss: 0.061624, Time:2min:51sec 
+ Test Avg. Loss: 0.003300, Accuracy: 0.909800
+Train - Epoch 352, Avg. Loss: 0.060317, Time:2min:51sec 
+ Test Avg. Loss: 0.003642, Accuracy: 0.903200
+Train - Epoch 353, Avg. Loss: 0.056567, Time:2min:51sec 
+ Test Avg. Loss: 0.003309, Accuracy: 0.908700
+Train - Epoch 354, Avg. Loss: 0.056369, Time:2min:51sec 
+ Test Avg. Loss: 0.003310, Accuracy: 0.908000
+Train - Epoch 355, Avg. Loss: 0.054945, Time:2min:51sec 
+ Test Avg. Loss: 0.003363, Accuracy: 0.908600
+Train - Epoch 356, Avg. Loss: 0.054253, Time:2min:51sec 
+ Test Avg. Loss: 0.003580, Accuracy: 0.904700
+Train - Epoch 357, Avg. Loss: 0.052231, Time:2min:51sec 
+ Test Avg. Loss: 0.003618, Accuracy: 0.903300
+Train - Epoch 358, Avg. Loss: 0.051870, Time:2min:51sec 
+ Test Avg. Loss: 0.003491, Accuracy: 0.905900
+Train - Epoch 359, Avg. Loss: 0.050234, Time:2min:51sec 
+ Test Avg. Loss: 0.003294, Accuracy: 0.911300
+Train - Epoch 360, Avg. Loss: 0.049870, Time:2min:51sec 
+ Test Avg. Loss: 0.003455, Accuracy: 0.905200
+Train - Epoch 361, Avg. Loss: 0.048072, Time:2min:51sec 
+ Test Avg. Loss: 0.003254, Accuracy: 0.911300
+Train - Epoch 362, Avg. Loss: 0.046046, Time:2min:51sec 
+ Test Avg. Loss: 0.003398, Accuracy: 0.908300
+Train - Epoch 363, Avg. Loss: 0.046041, Time:2min:51sec 
+ Test Avg. Loss: 0.003294, Accuracy: 0.909900
+Train - Epoch 364, Avg. Loss: 0.044394, Time:2min:51sec 
+ Test Avg. Loss: 0.003250, Accuracy: 0.909600
+Train - Epoch 365, Avg. Loss: 0.044848, Time:2min:51sec 
+ Test Avg. Loss: 0.003337, Accuracy: 0.906900
+Train - Epoch 366, Avg. Loss: 0.041462, Time:2min:51sec 
+ Test Avg. Loss: 0.003454, Accuracy: 0.910400
+Train - Epoch 367, Avg. Loss: 0.040501, Time:2min:51sec 
+ Test Avg. Loss: 0.003298, Accuracy: 0.910400
+Train - Epoch 368, Avg. Loss: 0.040179, Time:2min:51sec 
+ Test Avg. Loss: 0.003306, Accuracy: 0.911900
+Train - Epoch 369, Avg. Loss: 0.040469, Time:2min:51sec 
+ Test Avg. Loss: 0.003279, Accuracy: 0.909200
+Train - Epoch 370, Avg. Loss: 0.040545, Time:2min:51sec 
+ Test Avg. Loss: 0.003379, Accuracy: 0.910100
+Train - Epoch 371, Avg. Loss: 0.036539, Time:2min:51sec 
+ Test Avg. Loss: 0.003219, Accuracy: 0.911400
+Train - Epoch 372, Avg. Loss: 0.036726, Time:2min:51sec 
+ Test Avg. Loss: 0.003222, Accuracy: 0.912400
+Train - Epoch 373, Avg. Loss: 0.035661, Time:2min:51sec 
+ Test Avg. Loss: 0.003272, Accuracy: 0.910100
+Train - Epoch 374, Avg. Loss: 0.035614, Time:2min:51sec 
+ Test Avg. Loss: 0.003405, Accuracy: 0.908900
+Train - Epoch 375, Avg. Loss: 0.036848, Time:2min:51sec 
+ Test Avg. Loss: 0.003283, Accuracy: 0.910300
+Train - Epoch 376, Avg. Loss: 0.033705, Time:2min:51sec 
+ Test Avg. Loss: 0.003215, Accuracy: 0.912700
+Train - Epoch 377, Avg. Loss: 0.032836, Time:2min:51sec 
+ Test Avg. Loss: 0.003251, Accuracy: 0.911500
+Train - Epoch 378, Avg. Loss: 0.032081, Time:2min:51sec 
+ Test Avg. Loss: 0.003116, Accuracy: 0.915800
+Train - Epoch 379, Avg. Loss: 0.031247, Time:2min:51sec 
+ Test Avg. Loss: 0.003171, Accuracy: 0.914800
+Train - Epoch 380, Avg. Loss: 0.032215, Time:2min:51sec 
+ Test Avg. Loss: 0.003159, Accuracy: 0.913300
+Train - Epoch 381, Avg. Loss: 0.030184, Time:2min:51sec 
+ Test Avg. Loss: 0.003188, Accuracy: 0.914300
+Train - Epoch 382, Avg. Loss: 0.031554, Time:2min:51sec 
+ Test Avg. Loss: 0.003150, Accuracy: 0.915300
+Train - Epoch 383, Avg. Loss: 0.031078, Time:2min:51sec 
+ Test Avg. Loss: 0.003111, Accuracy: 0.915000
+Train - Epoch 384, Avg. Loss: 0.029315, Time:2min:51sec 
+ Test Avg. Loss: 0.003118, Accuracy: 0.913900
+Train - Epoch 385, Avg. Loss: 0.029397, Time:2min:51sec 
+ Test Avg. Loss: 0.003125, Accuracy: 0.914800
+Train - Epoch 386, Avg. Loss: 0.029591, Time:2min:51sec 
+ Test Avg. Loss: 0.003120, Accuracy: 0.915000
+Train - Epoch 387, Avg. Loss: 0.028876, Time:2min:51sec 
+ Test Avg. Loss: 0.003117, Accuracy: 0.915100
+Train - Epoch 388, Avg. Loss: 0.028580, Time:2min:51sec 
+ Test Avg. Loss: 0.003130, Accuracy: 0.913900
+Train - Epoch 389, Avg. Loss: 0.029486, Time:2min:51sec 
+ Test Avg. Loss: 0.003107, Accuracy: 0.916100
+Train - Epoch 390, Avg. Loss: 0.028201, Time:2min:51sec 
+ Test Avg. Loss: 0.003102, Accuracy: 0.914500
+Train - Epoch 391, Avg. Loss: 0.028562, Time:2min:51sec 
+ Test Avg. Loss: 0.003130, Accuracy: 0.915500
+Train - Epoch 392, Avg. Loss: 0.029009, Time:2min:51sec 
+ Test Avg. Loss: 0.003093, Accuracy: 0.916200
+Train - Epoch 393, Avg. Loss: 0.027518, Time:2min:51sec 
+ Test Avg. Loss: 0.003086, Accuracy: 0.915900
+Train - Epoch 394, Avg. Loss: 0.028987, Time:2min:51sec 
+ Test Avg. Loss: 0.003063, Accuracy: 0.915700
+Train - Epoch 395, Avg. Loss: 0.028511, Time:2min:51sec 
+ Test Avg. Loss: 0.003082, Accuracy: 0.915800
+Train - Epoch 396, Avg. Loss: 0.027507, Time:2min:51sec 
+ Test Avg. Loss: 0.003115, Accuracy: 0.915000
+Train - Epoch 397, Avg. Loss: 0.027859, Time:2min:51sec 
+ Test Avg. Loss: 0.003072, Accuracy: 0.916700
+Train - Epoch 398, Avg. Loss: 0.027122, Time:2min:51sec 
+ Test Avg. Loss: 0.003065, Accuracy: 0.916300
+Train - Epoch 399, Avg. Loss: 0.027510, Time:2min:51sec 
+ Test Avg. Loss: 0.003066, Accuracy: 0.916100
