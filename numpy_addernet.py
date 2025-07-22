@@ -77,12 +77,12 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     return output
 
 
-def forward_batchnorm2d(X, gamma, beta, running_mean, running_var, eps=1e-5):
+def forward_batchnorm2d(X, weight, bias, running_mean, running_var, eps=1e-5):
     mean = running_mean.reshape(1, -1, 1, 1)
     var = running_var.reshape(1, -1, 1, 1)
-    gamma = gamma.reshape(1, -1, 1, 1)
-    beta = beta.reshape(1, -1, 1, 1)
-    return gamma * (X - mean) / np.sqrt(var + eps) + beta
+    weight = weight.reshape(1, -1, 1, 1)
+    bias = bias.reshape(1, -1, 1, 1)
+    return weight * (X - mean) / np.sqrt(var + eps) + bias
 
 
 def relu(x):
@@ -179,8 +179,8 @@ def load_params(state_dict_torch):
     }
 
     params["bn1"] = {
-        "gamma": state_dict_torch["bn1.weight"],
-        "beta": state_dict_torch["bn1.bias"],
+        "weight": state_dict_torch["bn1.weight"],
+        "bias": state_dict_torch["bn1.bias"],
         "running_mean": state_dict_torch["bn1.running_mean"],
         "running_var": state_dict_torch["bn1.running_var"],
     }
@@ -200,8 +200,8 @@ def load_params(state_dict_torch):
             }
 
             block["bn1"] = {
-                "gamma": state_dict_torch[f"{block_prefix}.bn1.weight"],
-                "beta": state_dict_torch[f"{block_prefix}.bn1.bias"],
+                "weight": state_dict_torch[f"{block_prefix}.bn1.weight"],
+                "bias": state_dict_torch[f"{block_prefix}.bn1.bias"],
                 "running_mean": state_dict_torch[f"{block_prefix}.bn1.running_mean"],
                 "running_var": state_dict_torch[f"{block_prefix}.bn1.running_var"],
             }
@@ -214,8 +214,8 @@ def load_params(state_dict_torch):
             }
 
             block["bn2"] = {
-                "gamma": state_dict_torch[f"{block_prefix}.bn2.weight"],
-                "beta": state_dict_torch[f"{block_prefix}.bn2.bias"],
+                "weight": state_dict_torch[f"{block_prefix}.bn2.weight"],
+                "bias": state_dict_torch[f"{block_prefix}.bn2.bias"],
                 "running_mean": state_dict_torch[f"{block_prefix}.bn2.running_mean"],
                 "running_var": state_dict_torch[f"{block_prefix}.bn2.running_var"],
             }
@@ -228,8 +228,8 @@ def load_params(state_dict_torch):
                         "bias": state_dict_torch.get(f"{downsample_prefix}.0.b", None),
                     },
                     "bn": {
-                        "gamma": state_dict_torch[f"{downsample_prefix}.1.weight"],
-                        "beta": state_dict_torch[f"{downsample_prefix}.1.bias"],
+                        "weight": state_dict_torch[f"{downsample_prefix}.1.weight"],
+                        "bias": state_dict_torch[f"{downsample_prefix}.1.bias"],
                         "running_mean": state_dict_torch[
                             f"{downsample_prefix}.1.running_mean"
                         ],
@@ -249,8 +249,8 @@ def load_params(state_dict_torch):
     }
 
     params["bn2"] = {
-        "gamma": state_dict_torch["bn2.weight"],
-        "beta": state_dict_torch["bn2.bias"],
+        "weight": state_dict_torch["bn2.weight"],
+        "bias": state_dict_torch["bn2.bias"],
         "running_mean": state_dict_torch["bn2.running_mean"],
         "running_var": state_dict_torch["bn2.running_var"],
     }
