@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-
+from adder_approx import add_approx_signed,sub_approx_signed,approx_add_B,approx_add_C
 
 def im2col_indices(x, kh, kw, padding=0, stride=1):
     n_x, d, h, w = x.shape
@@ -39,13 +39,13 @@ def forward_conv2d(X, W, b=None, stride=1, padding=0):
     assert d_x == d_filter, "input channels must met filter channels"
 
     cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
+
     W_col = W.reshape(n_filters, -1)  # (n_filters, d * kh * kw)
 
     output = W_col @ cols  # (n_filters, n_x * h_out * w_out)
 
     h_out = (h_x + 2 * padding - h_filter) // stride + 1
     w_out = (w_x + 2 * padding - w_filter) // stride + 1
-    h_out, w_out = int(h_out), int(w_out)
 
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
 
@@ -69,12 +69,79 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     output = -np.abs(W_col[:, :, np.newaxis] - cols[np.newaxis, :, :]).sum(axis=1)
 
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+    if bias is not None:
+        output += bias.reshape(1, -1, 1, 1)
+    return output
+def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
+    n_x, d_x, h_x, w_x = X.shape
+    n_filters, d_filter, h_filter, w_filter = W.shape
+    assert d_x == d_filter,"input channels must met filter channels"
+
+    h_out = (h_x + 2 * padding - h_filter) // stride + 1
+    w_out = (w_x + 2 * padding - w_filter) // stride + 1
+    h_out, w_out = int(h_out), int(w_out)
+
+    cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)  # (K, M)
+    W_col = W.reshape(n_filters, -1)  # (C_out, K)
+
+    K = W_col.shape[1]      # filter_size
+    M = cols.shape[1]       # output_size
+    C_out = n_filters
+
+    def joint_quantize(tensor1, tensor2, qmin=-2**31, qmax=2**31-1):
+        # 获取最大绝对值
+        max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
+        scale = max_val / qmax if max_val != 0 else 1.0
+        q_tensor1 = np.round(tensor1 / scale).astype(np.int32)
+        q_tensor2 = np.round(tensor2 / scale).astype(np.int32)
+        q_tensor1 = np.clip(q_tensor1, qmin, qmax)
+        q_tensor2 = np.clip(q_tensor2, qmin, qmax)
+        return q_tensor1, q_tensor2, scale
+
+    W_q, cols_q, scale = joint_quantize(W_col, cols)  # (C_out, K), (K, M), float
+
+    # === 2. 广播并计算 diff_q = W_q - cols_q 使用 approx_add ===
+    # 扩展为 (C_out, 1, K) 和 (1, M, K)
+    W_q_exp = np.expand_dims(W_q, axis=1)        # (C_out, 1, K)
+    cols_q_exp = np.expand_dims(cols_q, axis=0)  # (1, M, K)
+
+    # 扩展后形状: (C_out, M, K)
+    W_q_br = np.broadcast_to(W_q_exp, (C_out, M, K))
+    cols_q_br = np.broadcast_to(cols_q_exp, (C_out, M, K))
+
+    # 定义近似加法和减法（可替换为具体近似逻辑）
+    def approx_add(a, b):
+        return a + b  # 示例：使用标准加法
+
+    def approx_sub(a, b):
+        neg_b = np.clip(-b, -2**31, 2**31 - 1)  # 防止溢出
+        return approx_add(a, neg_b)
+
+    diff_q = approx_sub(W_q_br, cols_q_br)  # (C_out, M, K), int32
+
+    # === 3. 计算 abs(diff_q) ===
+    abs_diff_q = np.abs(diff_q)
+    abs_diff_q = np.clip(abs_diff_q, None, 2**31 - 1)  # 防止溢出
+
+    # === 4. 使用 approx_sum 沿 K 维求和 ===
+    def approx_sum(x, axis):
+        return np.sum(x, axis=axis, dtype=np.int32)  # 示例：使用标准求和
+
+    output_int32 = approx_sum(abs_diff_q, axis=2)  # (C_out, M)
+
+    # === 5. 反量化：使用统一 scale ===
+    output_float = output_int32.astype(np.float32) * scale  # (C_out, M)
+
+    # AdderNet 输出为 L1 距离的负值
+    output = -output_float  # (C_out, M)
+
+    # Reshape 回输出形状
+    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)  # (n_x, C_out, h_out, w_out)
 
     if bias is not None:
         output += bias.reshape(1, -1, 1, 1)
-        
-    return output
 
+    return output
 
 def forward_batchnorm2d(X, weight, bias, running_mean, running_var, eps=1e-5):
     mean = running_mean.reshape(1, -1, 1, 1)

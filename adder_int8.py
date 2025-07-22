@@ -19,18 +19,15 @@ net.qconfig = torch.quantization.get_default_qconfig("fbgemm")
 model_prepared = torch.quantization.prepare(net, inplace=False)
 
 data_test_loader = DataLoader(
-    CIFAR10("cache/data/", train=True, transform=transform_test),
+    CIFAR10("cache/data/", train=False, transform=transform_test),
     batch_size=100,
     num_workers=0,
     shuffle=True
 )
 i =0
 with torch.no_grad():
-    for img, label in tqdm(data_test_loader,total=100):
-        i+=1
-        if i >=100:
-            break
+    for img, label in tqdm(data_test_loader,total=len(data_test_loader)):
         model_prepared(img)
 model_quantized = torch.quantization.convert(model_prepared, inplace=False)
 
-torch.jit.save(torch.jit.script(model_quantized), "model_int8_quantized.pth")
+torch.save(model_quantized.state_dict(), "addernet_int8_quantized.pth")

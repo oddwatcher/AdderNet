@@ -35,7 +35,7 @@ def approx_add_B(a: np.uint32, b: np.uint32, approx_bits: int) -> int:
 
     s_high = np.uint32(s_high + c_n << (approx_bits + 1))
 
-    return np.uint32(s_high + s_low)
+    return s_high + s_low  # numpy will automatically expand the type of data
 
 
 result = approx_add_B(0b011010010110100101101001, 1 << 15, 16)
@@ -56,16 +56,48 @@ def approx_add_C(a: int, b: int, approx_bits: int) -> int:
     s_low = np.uint32(a_approx_low | b_approx_low)
     s_high += np.uint32(
         (b_approx_low >> approx_bits - 1) & (a_approx_low >> approx_bits - 1)
-    )
+    ) << (approx_bits + 1)
 
-    return np.uint32(s_high + s_low)
+    return s_high + s_low
 
 
-def approx_sub(x: int, y: int, approx_bits: int, approx_add) -> int:
+INT32_MAX = np.iinfo(np.int32).max
+INT32_MIN = np.iinfo(np.int32).min
+UINT32_MAX = np.iinfo(np.uint32).max
 
-    if y == 0x80000000:
-        y_flipped = y
-    else:
-        y_flipped = -y & 0xFFFFFFFF
-    return approx_add(x, y_flipped, approx_bits)
 
+def add_approx_signed(a_int: np.int32, b_int: np.int32, adder, approx_bit) -> np.int32:
+    a_u = np.uint32(a_int)
+    b_u = np.uint32(b_int)
+    sum_u = adder(a_u, b_u, approx_bit)
+    sum_s = np.int32(sum_u)
+
+    a_sign = a_int > 0
+    b_sign = b_int > 0
+
+    if a_sign and b_sign:
+        if sum_s <= 0:
+            return np.int32(INT32_MAX)
+    elif not a_sign and not b_sign:
+        if sum_s >= 0:
+            return np.int32(INT32_MIN)
+    return sum_s
+
+
+def sub_approx_signed(a_int: np.int32, b_int: np.int32, adder, approx_bit) -> np.int32:
+    a_u = np.uint32(a_int)
+    neg_b_u = np.uint32(-np.int32(b_int))
+    sum_u = adder(a_u, neg_b_u, approx_bit)
+    sum_s = np.int32(sum_u)
+
+    c_s = np.int32(neg_b_u)
+    a_sign = a_int > 0
+    c_sign = c_s > 0
+
+    if a_sign and c_sign:
+        if sum_s <= 0:
+            return np.int32(INT32_MAX)
+    elif not a_sign and not c_sign:
+        if sum_s >= 0:
+            return np.int32(INT32_MIN)
+    return sum_s
