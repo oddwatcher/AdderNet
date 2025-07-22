@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-from adder_approx import approx_sum_B
+from adder_approx import approx_sum_B,approx_sum_C
 
 
 def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
@@ -89,7 +89,7 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     return output
 
 
-def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
+def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None, approx_bits=4):
     n_x, d_x, h_x, w_x = X.shape
     n_filters, d_filter, h_filter, w_filter = W.shape
     assert d_x == d_filter
@@ -102,7 +102,9 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
 
     W_q, cols_q, scale = joint_quantize(W_col, cols)
 
-    output = -np.abs(approx_sum_B(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :]))
+    output = -np.abs(
+        approx_sum_C(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
+    )
     output = np.sum(output, axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
 
@@ -317,7 +319,7 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
-    
+
     state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
