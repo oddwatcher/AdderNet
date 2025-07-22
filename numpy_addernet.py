@@ -39,7 +39,7 @@ def im2col_indices(x, kh, kw, padding=0, stride=1):
 def forward_conv2d(X, W, b=None, stride=1, padding=0):
     n_x, d_x, h_x, w_x = X.shape
     n_filters, d_filter, h_filter, w_filter = W.shape
-    assert d_x == d_filter, "输入通道数必须等于滤波器通道数"
+    assert d_x == d_filter, "input channels must met filter channels"
 
     cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
 
@@ -115,63 +115,48 @@ class ResNetNumpy:
         self.params = params
 
     def forward(self, X):
-        # Conv1
+        
         X = forward_conv2d(X, self.params["conv1"]["weight"], padding=1)
-        # BN1
         X = forward_batchnorm2d(X, **self.params["bn1"])
-        # ReLU
         X = relu(X)
 
-        # Layer1
         for i in range(3):
             X = self._forward_basic_block(X, self.params["layer1"][f"block{i}"])
 
-        # Layer2
         for i in range(3):
             X = self._forward_basic_block(X, self.params["layer2"][f"block{i}"])
 
-        # Layer3
         for i in range(3):
             X = self._forward_basic_block(X, self.params["layer3"][f"block{i}"])
 
-        # AvgPool
         X = forward_avgpool2d(X, kernel_size=8)
 
-        # FC Layer
         X = forward_conv2d(X, self.params["fc"]["weight"])
 
-        # BN2
         X = forward_batchnorm2d(X, **self.params["bn2"])
 
-        # Flatten
         return X.reshape(X.shape[0], -1)
 
     def _forward_basic_block(self, X, block_params):
         residual = X
 
-        # Conv1
         X = forward_adder2d(
             X,
             block_params["conv1"]["weight"],
             stride=block_params["conv1"]["stride"],
             padding=block_params["conv1"]["padding"],
         )
-        # BN1
+    
         X = forward_batchnorm2d(X, **block_params["bn1"])
-        # ReLU
         X = relu(X)
-
-        # Conv2
         X = forward_adder2d(
             X,
             block_params["conv2"]["weight"],
             stride=block_params["conv2"]["stride"],
             padding=block_params["conv2"]["padding"],
         )
-        # BN2
         X = forward_batchnorm2d(X, **block_params["bn2"])
 
-        # Downsample
         if block_params.get("downsample", None):
             residual = forward_adder2d(
                 residual,
@@ -181,7 +166,6 @@ class ResNetNumpy:
             )
             residual = forward_batchnorm2d(residual, **block_params["downsample"]["bn"])
 
-        # Residual + ReLU
         X += residual
         X = relu(X)
         return X
@@ -190,12 +174,10 @@ class ResNetNumpy:
 def load_params(state_dict_torch):
     params = {}
 
-    # Conv1
     params["conv1"] = {
         "weight": state_dict_torch["conv1.weight"],
     }
 
-    # BN1
     params["bn1"] = {
         "gamma": state_dict_torch["bn1.weight"],
         "beta": state_dict_torch["bn1.bias"],
@@ -203,14 +185,13 @@ def load_params(state_dict_torch):
         "running_var": state_dict_torch["bn1.running_var"],
     }
 
-    # Layer1, Layer2, Layer3
+
     for layer in ["layer1", "layer2", "layer3"]:
         params[layer] = {}
         for i in range(3):
             block_prefix = f"{layer}.{i}"
             block = {}
 
-            # Conv1
             block["conv1"] = {
                 "weight": state_dict_torch[f"{block_prefix}.conv1.adder"],
                 "bias": state_dict_torch.get(f"{block_prefix}.conv1.b", None),
@@ -218,7 +199,6 @@ def load_params(state_dict_torch):
                 "padding": 1,
             }
 
-            # BN1
             block["bn1"] = {
                 "gamma": state_dict_torch[f"{block_prefix}.bn1.weight"],
                 "beta": state_dict_torch[f"{block_prefix}.bn1.bias"],
@@ -226,7 +206,6 @@ def load_params(state_dict_torch):
                 "running_var": state_dict_torch[f"{block_prefix}.bn1.running_var"],
             }
 
-            # Conv2
             block["conv2"] = {
                 "weight": state_dict_torch[f"{block_prefix}.conv2.adder"],
                 "bias": state_dict_torch.get(f"{block_prefix}.conv2.b", None),
@@ -234,7 +213,6 @@ def load_params(state_dict_torch):
                 "padding": 1,
             }
 
-            # BN2
             block["bn2"] = {
                 "gamma": state_dict_torch[f"{block_prefix}.bn2.weight"],
                 "beta": state_dict_torch[f"{block_prefix}.bn2.bias"],
@@ -242,7 +220,6 @@ def load_params(state_dict_torch):
                 "running_var": state_dict_torch[f"{block_prefix}.bn2.running_var"],
             }
 
-            # Downsample
             downsample_prefix = f"{block_prefix}.downsample"
             if f"{downsample_prefix}.0.adder" in state_dict_torch:
                 block["downsample"] = {
