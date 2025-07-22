@@ -1,7 +1,19 @@
 import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-from adder_approx import *
+from adder_approx import approx_sum_B
+
+
+
+def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
+    # Should be done at train-quantize process however mother f*king torch does not support quantization of custom modules
+    max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
+    scale = max_val / qmax if max_val != 0 else 1.0
+    q_tensor1 = np.round(tensor1 / scale).astype(np.int32)
+    q_tensor2 = np.round(tensor2 / scale).astype(np.int32)
+    q_tensor1 = np.clip(q_tensor1, qmin, qmax)
+    q_tensor2 = np.clip(q_tensor2, qmin, qmax)
+    return q_tensor1, q_tensor2, scale
 
 
 def im2col_indices(x, kh, kw, padding=0, stride=1):
@@ -55,7 +67,28 @@ def forward_conv2d(X, W, b=None, stride=1, padding=0):
         output += b.reshape(1, -1, 1, 1)
 
     return output
+    
+def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
+    n_x, d_x, h_x, w_x = X.shape
+    n_filters, d_filter, h_filter, w_filter = W.shape
+    assert d_x == d_filter
+    h_out = (h_x + 2 * padding - h_filter) // stride + 1
+    w_out = (w_x + 2 * padding - w_filter) // stride + 1
+    h_out, w_out = int(h_out), int(w_out)
 
+    cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
+    W_col = W.reshape(n_filters, -1)
+
+    W_q, cols_q, scale = joint_quantize(W_col, cols)
+
+    output = -np.abs(approx_sum_B(W_q[:, :, np.newaxis], - cols_q[np.newaxis, :, :]))
+    output = np.sum(output,axis=1) * scale
+    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+
+    if bias is not None:
+        output += bias.reshape(1, -1, 1, 1)
+
+    return output
 
 def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     n_x, d_x, h_x, w_x = X.shape
@@ -68,69 +101,16 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
     W_col = W.reshape(n_filters, -1)
 
-    output = -np.abs(W_col[:, :, np.newaxis] - cols[np.newaxis, :, :]).sum(axis=1)
+    W_q, cols_q, scale = joint_quantize(W_col, cols)
 
+    output = -np.abs(W_q[:, :, np.newaxis] - cols_q[np.newaxis, :, :])
+    output = np.sum(output,axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
 
     if bias is not None:
         output += bias.reshape(1, -1, 1, 1)
-    return output
-
-def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
-    n_x, d_x, h_x, w_x = X.shape
-    n_filters, d_filter, h_filter, w_filter = W.shape
-    assert d_x == d_filter, "input channels must met filter channels"
-
-    h_out = (h_x + 2 * padding - h_filter) // stride + 1
-    w_out = (w_x + 2 * padding - w_filter) // stride + 1
-    h_out, w_out = int(h_out), int(w_out)
-
-    cols = im2col_indices(
-        X, h_filter, w_filter, padding=padding, stride=stride
-    )  # (K, M)
-    W_col = W.reshape(n_filters, -1)  
-
-    K = W_col.shape[1]  
-    M = cols.shape[1]  
-    C_out = n_filters
-
-    def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
-        max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
-        scale = max_val / qmax if max_val != 0 else 1.0
-        q_tensor1 = np.round(tensor1 / scale).astype(np.int32)
-        q_tensor2 = np.round(tensor2 / scale).astype(np.int32)
-        q_tensor1 = np.clip(q_tensor1, qmin, qmax)
-        q_tensor2 = np.clip(q_tensor2, qmin, qmax)
-        return q_tensor1, q_tensor2, scale
-
-    W_q, cols_q, scale = joint_quantize(W_col, cols)
-
-    W_q_exp = np.expand_dims(W_q, axis=1)
-    cols_q_exp = np.expand_dims(cols_q, axis=0)
-
-    W_q_br = np.broadcast_to(W_q_exp, (C_out, M, K))
-    cols_q_br = np.broadcast_to(cols_q_exp, (C_out, M, K))
-
-    diff_q = approx_sum(W_q_br, cols_q_br)
-
-  
-    abs_diff_q = np.abs(diff_q)
-    abs_diff_q = np.clip(abs_diff_q, None, 2**31 - 1)  
-
-    output_int32 = np.sum(abs_diff_q, axis=2)
-
-    output_float = output_int32.astype(np.float32) * scale 
-
-    output = -output_float  
-    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(
-        1, 0, 2, 3
-    )  
-
-    if bias is not None:
-        output += bias.reshape(1, -1, 1, 1)
 
     return output
-
 
 def forward_batchnorm2d(X, weight, bias, running_mean, running_var, eps=1e-5):
     mean = running_mean.reshape(1, -1, 1, 1)
@@ -195,7 +175,7 @@ class ResNetNumpy:
     def _forward_basic_block(self, X, block_params):
         residual = X
 
-        X = forward_adder2d(
+        X = forward_adder2d_approx(
             X,
             block_params["conv1"]["weight"],
             stride=block_params["conv1"]["stride"],
@@ -204,7 +184,7 @@ class ResNetNumpy:
 
         X = forward_batchnorm2d(X, **block_params["bn1"])
         X = relu(X)
-        X = forward_adder2d(
+        X = forward_adder2d_approx(
             X,
             block_params["conv2"]["weight"],
             stride=block_params["conv2"]["stride"],
@@ -213,7 +193,7 @@ class ResNetNumpy:
         X = forward_batchnorm2d(X, **block_params["bn2"])
 
         if block_params.get("downsample", None):
-            residual = forward_adder2d(
+            residual = forward_adder2d_approx(
                 residual,
                 block_params["downsample"]["adder"]["weight"],
                 stride=block_params["downsample"]["stride"],
@@ -347,5 +327,7 @@ if __name__ == "__main__":
 
             total += labels.size(0)
             correct += (predicted == labels.numpy()).sum().item()
+            print(f"Test Accuracy: {100 * correct / total:.2f}%")
 
+    # 输出测试结果
     print(f"Test Accuracy: {100 * correct / total:.2f}%")
