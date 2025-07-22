@@ -5,7 +5,7 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the BSD 3-Clause License for more details.
 
 import os
-from resnet20mono import resnet20
+from resnet20MNIST import resnet20
 import torch
 from torch.autograd import Variable
 from torchvision.datasets import MNIST
@@ -67,6 +67,7 @@ def train(epoch, start_time):
     adjust_learning_rate(optimizer, epoch)
     global cur_batch_win
     net.train()
+    total_loss = 0
     loss_list, batch_list = [], []
     print("Train - Epoch %d" % epoch)
     for i, (images, labels) in tqdm(
@@ -85,10 +86,9 @@ def train(epoch, start_time):
 
         loss.backward()
         optimizer.step()
-    total_loss = 0
-    for i in loss_list:
-        total_loss += i
-    avg_loss = total_loss / len(loss_list)
+        total_loss += loss
+
+    avg_loss = total_loss / len(data_train_loader)
     with open(log, "a") as f:
         f.write(
             "Train - Epoch %d, Avg. Loss: %f, Time:%dmin:%dsec \n "

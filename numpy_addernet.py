@@ -1,0 +1,321 @@
+import torch
+import numpy as np
+from numpy.lib.stride_tricks import as_strided
+
+import numpy as np
+from numpy.lib.stride_tricks import as_strided
+
+
+def im2col_indices(x, kh, kw, padding=0, stride=1):
+    n_x, d, h, w = x.shape
+
+    h_out = (h + 2 * padding - kh) // stride + 1
+    w_out = (w + 2 * padding - kw) // stride + 1
+
+    if padding > 0:
+        x = np.pad(
+            x,
+            ((0, 0), (0, 0), (padding, padding), (padding, padding)),
+            mode="constant",
+            constant_values=0,
+        )
+    else:
+        x = x.copy() 
+
+    shape = (n_x, d, kh, kw, h_out, w_out)
+    strides = (
+        x.strides[0],
+        x.strides[1],
+        x.strides[2],
+        x.strides[3],
+        stride * x.strides[2],
+        stride * x.strides[3],
+    )
+    x_strided = as_strided(x, shape=shape, strides=strides, writeable=False)
+
+    return x_strided.reshape(d * kh * kw, n_x * h_out * w_out)
+
+
+def forward_conv2d(X, W, b=None, stride=1, padding=0):
+    n_x, d_x, h_x, w_x = X.shape
+    n_filters, d_filter, h_filter, w_filter = W.shape
+    assert d_x == d_filter, "输入通道数必须等于滤波器通道数"
+
+    cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
+
+    W_col = W.reshape(n_filters, -1)  # (n_filters, d * kh * kw)
+
+    output = W_col @ cols  # (n_filters, n_x * h_out * w_out)
+
+    h_out = (h_x + 2 * padding - h_filter) // stride + 1
+    w_out = (w_x + 2 * padding - w_filter) // stride + 1
+
+    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+
+    if b is not None:
+        output += b.reshape(1, -1, 1, 1)
+
+    return output
+
+
+def forward_adder2d(X, W, stride=1, padding=0, bias=None):
+    n_x, d_x, h_x, w_x = X.shape
+    n_filters, d_filter, h_filter, w_filter = W.shape
+    assert d_x == d_filter
+    h_out = (h_x + 2 * padding - h_filter) // stride + 1
+    w_out = (w_x + 2 * padding - w_filter) // stride + 1
+    h_out, w_out = int(h_out), int(w_out)
+    
+    cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
+    W_col = W.reshape(n_filters, -1)
+
+    output = -np.abs(W_col[:, :, np.newaxis] - cols[np.newaxis, :, :]).sum(axis=1)
+
+    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+    if bias is not None:
+        output += bias.reshape(1, -1, 1, 1)
+    return output
+
+
+def forward_batchnorm2d(X, gamma, beta, running_mean, running_var, eps=1e-5):
+    mean = running_mean.reshape(1, -1, 1, 1)
+    var = running_var.reshape(1, -1, 1, 1)
+    gamma = gamma.reshape(1, -1, 1, 1)
+    beta = beta.reshape(1, -1, 1, 1)
+    return gamma * (X - mean) / np.sqrt(var + eps) + beta
+
+
+def relu(x):
+    return np.maximum(0, x)
+
+
+def forward_avgpool2d(X, kernel_size, stride=None):
+    if stride is None:
+        stride = kernel_size
+
+    N, C, H, W = X.shape
+    H_out = (H - kernel_size) // stride + 1
+    W_out = (W - kernel_size) // stride + 1
+
+    output = np.zeros((N, C, H_out, W_out))
+
+    for h in range(H_out):
+        for w in range(W_out):
+            h_start = h * stride
+            h_end = h_start + kernel_size
+            w_start = w * stride
+            w_end = w_start + kernel_size
+            output[:, :, h, w] = X[:, :, h_start:h_end, w_start:w_end].mean(axis=(2, 3))
+
+    return output
+
+
+class ResNetNumpy:
+    def __init__(self, params):
+        self.params = params
+
+    def forward(self, X):
+        # Conv1
+        X = forward_conv2d(X, self.params["conv1"]["weight"], padding=1)
+        # BN1
+        X = forward_batchnorm2d(X, **self.params["bn1"])
+        # ReLU
+        X = relu(X)
+
+        # Layer1
+        for i in range(3):
+            X = self._forward_basic_block(X, self.params["layer1"][f"block{i}"])
+
+        # Layer2
+        for i in range(3):
+            X = self._forward_basic_block(X, self.params["layer2"][f"block{i}"])
+
+        # Layer3
+        for i in range(3):
+            X = self._forward_basic_block(X, self.params["layer3"][f"block{i}"])
+
+        # AvgPool
+        X = forward_avgpool2d(X, kernel_size=8)
+
+        # FC Layer
+        X = forward_conv2d(X, self.params["fc"]["weight"])
+
+        # BN2
+        X = forward_batchnorm2d(X, **self.params["bn2"])
+
+        # Flatten
+        return X.reshape(X.shape[0], -1)
+
+    def _forward_basic_block(self, X, block_params):
+        residual = X
+
+        # Conv1
+        X = forward_adder2d(
+            X,
+            block_params["conv1"]["weight"],
+            stride=block_params["conv1"]["stride"],
+            padding=block_params["conv1"]["padding"],
+        )
+        # BN1
+        X = forward_batchnorm2d(X, **block_params["bn1"])
+        # ReLU
+        X = relu(X)
+
+        # Conv2
+        X = forward_adder2d(
+            X,
+            block_params["conv2"]["weight"],
+            stride=block_params["conv2"]["stride"],
+            padding=block_params["conv2"]["padding"],
+        )
+        # BN2
+        X = forward_batchnorm2d(X, **block_params["bn2"])
+
+        # Downsample
+        if block_params.get("downsample", None):
+            residual = forward_adder2d(
+                residual,
+                block_params["downsample"]["adder"]["weight"],
+                stride=block_params["downsample"]["stride"],
+                padding=0,
+            )
+            residual = forward_batchnorm2d(residual, **block_params["downsample"]["bn"])
+
+        # Residual + ReLU
+        X += residual
+        X = relu(X)
+        return X
+
+
+def load_params(state_dict_torch):
+    params = {}
+
+    # Conv1
+    params["conv1"] = {
+        "weight": state_dict_torch["conv1.weight"],
+    }
+
+    # BN1
+    params["bn1"] = {
+        "gamma": state_dict_torch["bn1.weight"],
+        "beta": state_dict_torch["bn1.bias"],
+        "running_mean": state_dict_torch["bn1.running_mean"],
+        "running_var": state_dict_torch["bn1.running_var"],
+    }
+
+    # Layer1, Layer2, Layer3
+    for layer in ["layer1", "layer2", "layer3"]:
+        params[layer] = {}
+        for i in range(3):
+            block_prefix = f"{layer}.{i}"
+            block = {}
+
+            # Conv1
+            block["conv1"] = {
+                "weight": state_dict_torch[f"{block_prefix}.conv1.adder"],
+                "bias": state_dict_torch.get(f"{block_prefix}.conv1.b", None),
+                "stride": 2 if layer != "layer1" and i == 0 else 1,
+                "padding": 1,
+            }
+
+            # BN1
+            block["bn1"] = {
+                "gamma": state_dict_torch[f"{block_prefix}.bn1.weight"],
+                "beta": state_dict_torch[f"{block_prefix}.bn1.bias"],
+                "running_mean": state_dict_torch[f"{block_prefix}.bn1.running_mean"],
+                "running_var": state_dict_torch[f"{block_prefix}.bn1.running_var"],
+            }
+
+            # Conv2
+            block["conv2"] = {
+                "weight": state_dict_torch[f"{block_prefix}.conv2.adder"],
+                "bias": state_dict_torch.get(f"{block_prefix}.conv2.b", None),
+                "stride": 1,
+                "padding": 1,
+            }
+
+            # BN2
+            block["bn2"] = {
+                "gamma": state_dict_torch[f"{block_prefix}.bn2.weight"],
+                "beta": state_dict_torch[f"{block_prefix}.bn2.bias"],
+                "running_mean": state_dict_torch[f"{block_prefix}.bn2.running_mean"],
+                "running_var": state_dict_torch[f"{block_prefix}.bn2.running_var"],
+            }
+
+            # Downsample
+            downsample_prefix = f"{block_prefix}.downsample"
+            if f"{downsample_prefix}.0.adder" in state_dict_torch:
+                block["downsample"] = {
+                    "adder": {
+                        "weight": state_dict_torch[f"{downsample_prefix}.0.adder"],
+                        "bias": state_dict_torch.get(f"{downsample_prefix}.0.b", None),
+                    },
+                    "bn": {
+                        "gamma": state_dict_torch[f"{downsample_prefix}.1.weight"],
+                        "beta": state_dict_torch[f"{downsample_prefix}.1.bias"],
+                        "running_mean": state_dict_torch[
+                            f"{downsample_prefix}.1.running_mean"
+                        ],
+                        "running_var": state_dict_torch[
+                            f"{downsample_prefix}.1.running_var"
+                        ],
+                    },
+                    "stride": 2,
+                }
+            else:
+                block["downsample"] = None
+
+            params[layer][f"block{i}"] = block
+
+    params["fc"] = {
+        "weight": state_dict_torch["fc.weight"],
+    }
+
+    params["bn2"] = {
+        "gamma": state_dict_torch["bn2.weight"],
+        "beta": state_dict_torch["bn2.bias"],
+        "running_mean": state_dict_torch["bn2.running_mean"],
+        "running_var": state_dict_torch["bn2.running_var"],
+    }
+
+    return params
+
+
+if __name__ == "__main__":
+    from tqdm import tqdm
+    state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
+
+    state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
+    params = load_params(state_dict)
+
+    resnet_numpy = ResNetNumpy(params)
+
+    from torchvision.datasets import CIFAR10
+    from torchvision import transforms
+
+    transform_test = transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        ]
+    )
+
+    data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
+    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=False)
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for images, labels in tqdm(test_loader,total=len(test_loader)):
+
+            images_np = images.numpy()
+
+            outputs = resnet_numpy.forward(images_np)
+
+            predicted = np.argmax(outputs, axis=1)
+
+            total += labels.size(0)
+            correct += (predicted == labels.numpy()).sum().item()
+            print(f"Test Accuracy: {100 * correct / total:.2f}%")
+
+    # 输出测试结果
+    print(f"Test Accuracy: {100 * correct / total:.2f}%")
