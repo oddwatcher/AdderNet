@@ -65,16 +65,9 @@ INT32_MAX = np.iinfo(np.int32).max
 INT32_MIN = np.iinfo(np.int32).min
 UINT32_MAX = np.iinfo(np.uint32).max
 
-@vectorize(
-    ['int32(int32, int32)'],
-    target='parallel',
-    fastmath=True,
-    nopython=True
-)
-def approx_sum_B(
-    a_int: np.int32,
-    b_int: np.int32,
-) -> np.int32:
+
+@vectorize(["int32(int32, int32)"], target="parallel", fastmath=True, nopython=True)
+def approx_sum_B(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.int32:
 
     a = np.uint32(a_int)
     b = np.uint32(b_int)
@@ -119,7 +112,3 @@ def approx_sum_B(
         if sum_s >= 0:
             return np.int32(INT32_MIN)
     return sum_s
-
-
-
-   

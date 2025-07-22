@@ -4,7 +4,6 @@ from numpy.lib.stride_tricks import as_strided
 from adder_approx import approx_sum_B
 
 
-
 def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
     # Should be done at train-quantize process however mother f*king torch does not support quantization of custom modules
     max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
@@ -67,7 +66,29 @@ def forward_conv2d(X, W, b=None, stride=1, padding=0):
         output += b.reshape(1, -1, 1, 1)
 
     return output
-    
+
+
+def forward_adder2d(X, W, stride=1, padding=0, bias=None):
+    n_x, d_x, h_x, w_x = X.shape
+    n_filters, d_filter, h_filter, w_filter = W.shape
+    assert d_x == d_filter
+    h_out = (h_x + 2 * padding - h_filter) // stride + 1
+    w_out = (w_x + 2 * padding - w_filter) // stride + 1
+    h_out, w_out = int(h_out), int(w_out)
+
+    cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
+    W_col = W.reshape(n_filters, -1)
+
+    output = -np.abs(W_col[:, :, np.newaxis] - cols[np.newaxis, :, :]).sum(axis=1)
+
+    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+
+    if bias is not None:
+        output += bias.reshape(1, -1, 1, 1)
+
+    return output
+
+
 def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
     n_x, d_x, h_x, w_x = X.shape
     n_filters, d_filter, h_filter, w_filter = W.shape
@@ -81,8 +102,8 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
 
     W_q, cols_q, scale = joint_quantize(W_col, cols)
 
-    output = -np.abs(approx_sum_B(W_q[:, :, np.newaxis], - cols_q[np.newaxis, :, :]))
-    output = np.sum(output,axis=1) * scale
+    output = -np.abs(approx_sum_B(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :]))
+    output = np.sum(output, axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
 
     if bias is not None:
@@ -90,7 +111,8 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
 
     return output
 
-def forward_adder2d(X, W, stride=1, padding=0, bias=None):
+
+def forward_adder2d_quantize(X, W, stride=1, padding=0, bias=None):
     n_x, d_x, h_x, w_x = X.shape
     n_filters, d_filter, h_filter, w_filter = W.shape
     assert d_x == d_filter
@@ -104,13 +126,14 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     W_q, cols_q, scale = joint_quantize(W_col, cols)
 
     output = -np.abs(W_q[:, :, np.newaxis] - cols_q[np.newaxis, :, :])
-    output = np.sum(output,axis=1) * scale
+    output = np.sum(output, axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
 
     if bias is not None:
         output += bias.reshape(1, -1, 1, 1)
 
     return output
+
 
 def forward_batchnorm2d(X, weight, bias, running_mean, running_var, eps=1e-5):
     mean = running_mean.reshape(1, -1, 1, 1)
@@ -294,7 +317,7 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
-
+    
     state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
