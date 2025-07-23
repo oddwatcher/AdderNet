@@ -339,7 +339,7 @@ if __name__ == "__main__":
     data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
     test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
     resnet_numpy = ResNetNumpy(params)
-    log = "TypeB_adder-resnet20_CIFAR10_q32.txt"
+    log = "TypeC_adder-resnet20_CIFAR10_q32.txt"
 
     for i in range(1, 33):
         approx_bits = i
