@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-from adder_approx import approx_sum_B,approx_sum_C
+from adder_approx import approx_sum_B, approx_sum_C
 
 
 def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
@@ -89,7 +89,8 @@ def forward_adder2d(X, W, stride=1, padding=0, bias=None):
     return output
 
 
-def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None, approx_bits=4):
+def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
+    global approx_bits
     n_x, d_x, h_x, w_x = X.shape
     n_filters, d_filter, h_filter, w_filter = W.shape
     assert d_x == d_filter
@@ -319,17 +320,15 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
+    from torchvision.datasets import CIFAR10
+    from torchvision import transforms
 
+    global approx_bits
+    approx_bits = 0
     state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
     params = load_params(state_dict)
-
-    resnet_numpy = ResNetNumpy(params)
-
-    from torchvision.datasets import CIFAR10
-    from torchvision import transforms
-
     transform_test = transforms.Compose(
         [
             transforms.ToTensor(),
@@ -338,21 +337,33 @@ if __name__ == "__main__":
     )
 
     data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
-    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=False)
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for images, labels in tqdm(test_loader, total=len(test_loader)):
+    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
+    resnet_numpy = ResNetNumpy(params)
+    log = "TypeB_adder-resnet20_CIFAR10_q32.txt"
 
-            images_np = images.numpy()
+    for i in range(1, 33):
+        approx_bits = i
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for num, pair in enumerate(tqdm(test_loader, total=len(test_loader))):
+                images, labels = pair
+                if num > 2000:
+                    break
+                images_np = images.numpy()
 
-            outputs = resnet_numpy.forward(images_np)
+                outputs = resnet_numpy.forward(images_np)
 
-            predicted = np.argmax(outputs, axis=1)
+                predicted = np.argmax(outputs, axis=1)
 
-            total += labels.size(0)
-            correct += (predicted == labels.numpy()).sum().item()
-            print(f"Test Accuracy: {100 * correct / total:.2f}%")
+                total += labels.size(0)
+                correct += (predicted == labels.numpy()).sum().item()
+                print(
+                    f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}"
+                )
 
-    # 输出测试结果
-    print(f"Test Accuracy: {100 * correct / total:.2f}%")
+        print(f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}")
+        with open(log, "a") as log:
+            log.write(
+                f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}\n"
+            )

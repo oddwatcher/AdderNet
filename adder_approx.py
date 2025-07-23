@@ -4,13 +4,13 @@ import numpy as np
 from numba import vectorize
 
 
-def approx_add_B(a: np.uint32, b: np.uint32, approx_bits: int) -> int:
+def approx_add_B(a: np.int32, b: np.int32, approx_bits: int) -> int:
     a = np.uint32(a)
     b = np.uint32(b)
     mask_32 = np.uint32((1 << 32) - 1)
     mask_approx = np.uint32((1 << approx_bits) - 1)
 
-    c0 = np.uint(0)
+    c0 = np.uint32(0)
     a_approx_low = a & mask_approx
     b_approx_low = b & mask_approx
     b_approx_low_1 = np.uint32(b_approx_low >> 1)
@@ -32,11 +32,11 @@ def approx_add_B(a: np.uint32, b: np.uint32, approx_bits: int) -> int:
 
     s_low = np.uint32(s_low >> 1)
     s_low = np.uint32((s_low << 1) + s0)
-    c_n = np.uint32(b_approx_low >> (approx_bits - 1))
+    c_n = np.uint32(b_approx_low % 2)
 
-    s_high = np.uint32(s_high + c_n << (approx_bits + 1))
+    s_high = np.uint32(s_high + c_n << (approx_bits))
 
-    return s_high + s_low  # numpy will automatically expand the type of data
+    return np.int32(s_high + s_low)  # numpy will automatically expand the type of data
 
 
 def approx_add_C(a: int, b: int, approx_bits: int) -> int:
@@ -71,12 +71,14 @@ UINT32_MAX = np.iinfo(np.uint32).max
 )
 def approx_sum_B(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.int32:
 
-    a = np.uint32(a_int)
-    b = np.uint32(b_int)
+    a_sign = a_int > 0
+    b_sign = b_int > 0
+    # sum/sub detection
     mask_32 = np.uint32((1 << 32) - 1)
     mask_approx = np.uint32((1 << approx_bits) - 1)
-
-    c0 = np.uint(0)
+    a = np.uint32(a_int)
+    b = np.uint32(b_int)
+    c0 = np.uint32(0)
     a_approx_low = a & mask_approx
     b_approx_low = b & mask_approx
     b_approx_low_1 = np.uint32(b_approx_low >> 1)
@@ -98,14 +100,11 @@ def approx_sum_B(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.
 
     s_low = np.uint32(s_low >> 1)
     s_low = np.uint32((s_low << 1) + s0)
-    c_n = np.uint32(b_approx_low >> (approx_bits - 1))
+    c_n = np.uint32(b_approx_low % 2)
 
-    s_high = np.uint32(s_high + c_n << (approx_bits + 1))
+    s_high = np.uint32(s_high + c_n << (approx_bits))
 
     sum_s = np.int32(s_high + s_low)
-
-    a_sign = a_int > 0
-    b_sign = b_int > 0
 
     if a_sign and b_sign:
         if sum_s <= 0:
@@ -133,8 +132,9 @@ def approx_sum_C(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.
     s_high = np.uint32(a_approx_high + b_approx_high)
     s_low = np.uint32(a_approx_low | b_approx_low)
     s_high += np.uint32(
-        (b_approx_low >> approx_bits - 1) & (a_approx_low >> approx_bits - 1)
-    ) << (approx_bits + 1)
+        ((b_approx_low >> (approx_bits - 1)) & (a_approx_low >> (approx_bits - 1)))
+        << (approx_bits + 1)
+    )
 
     sum_s = np.int32(s_high + s_low)
 
@@ -148,3 +148,14 @@ def approx_sum_C(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.
         if sum_s >= 0:
             return np.int32(INT32_MIN)
     return sum_s
+
+
+import random
+
+if __name__ == "__main__":
+    for i in range(1, 1 << 32 - 1):
+        j = random.randint(1, 1 << 32 - 1)
+        true = np.int64(i + j)
+        result = approx_add_B(i, j, 1)
+        diff = np.int64(true - result)
+        print(diff)
