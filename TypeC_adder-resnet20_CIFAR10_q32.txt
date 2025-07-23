@@ -1,3 +1,0 @@
-Test Accuracy: 92.10% approx_bits:1
-Test Accuracy: 91.50% approx_bits:2
-Test Accuracy: 91.85% approx_bits:3

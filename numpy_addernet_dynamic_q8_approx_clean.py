@@ -1,4 +1,3 @@
-import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 from adder_approx import approx_sum_B, approx_sum_C

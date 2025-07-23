@@ -325,7 +325,7 @@ if __name__ == "__main__":
 
     global approx_bits
     approx_bits = 0
-    state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
+    state_dict = torch.load("trained/addernet_CIFAR10_best.pt",map_location='cuda:0')
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
     params = load_params(state_dict)
@@ -348,7 +348,7 @@ if __name__ == "__main__":
         with torch.no_grad():
             for num, pair in enumerate(tqdm(test_loader, total=len(test_loader))):
                 images, labels = pair
-                if num > 2000:
+                if num > 1000:
                     break
                 images_np = images.numpy()
 
