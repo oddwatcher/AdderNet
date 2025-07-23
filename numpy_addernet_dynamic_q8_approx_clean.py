@@ -345,7 +345,7 @@ if __name__ == "__main__":
         return img
 
     data_test = CIFAR10("./cache/data/", train=False, transform=transform_test_numpy)
-    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
+    
     resnet_numpy = ResNetNumpy(params)
     log = "TypeC_adder-resnet20_CIFAR10_q32.txt"
 
@@ -353,22 +353,21 @@ if __name__ == "__main__":
         approx_bits = i
         correct = 0
         total = 0
-        with torch.no_grad():
-            for num, pair in enumerate(tqdm(test_loader, total=len(test_loader))):
-                images, labels = pair
-                if num > 2000:
-                    break
-                images_np = images.numpy()
 
-                outputs = resnet_numpy.forward(images_np)
+        for num, pair in enumerate(tqdm(data_test, total=1000)):
+            images, label = pair
+            if num > 1000:
+                break
+            images = np.expand_dims(images, axis=0)
+            outputs = resnet_numpy.forward(images)
 
-                predicted = np.argmax(outputs, axis=1)
+            predicted = np.argmax(outputs, axis=1).item()
 
-                total += labels.size(0)
-                correct += (predicted == labels.numpy()).sum().item()
-                print(
-                    f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}"
-                )
+            total += 1
+            correct += (predicted == label)
+            print(
+                f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}"
+            )
 
         print(f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}")
         with open(log, "a") as logout:
