@@ -363,7 +363,7 @@ if __name__ == "__main__":
                 )
 
         print(f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}")
-        with open(log, "a") as log:
-            log.write(
+        with open(log, "a") as logout:
+            logout.write(
                 f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}\n"
             )
