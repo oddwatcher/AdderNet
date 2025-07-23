@@ -3,64 +3,6 @@ from torch.autograd import Function
 import numpy as np
 from numba import vectorize
 
-
-def approx_add_B(a: np.int32, b: np.int32, approx_bits: int) -> int:
-    a = np.uint32(a)
-    b = np.uint32(b)
-    mask_32 = np.uint32((1 << 32) - 1)
-    mask_approx = np.uint32((1 << approx_bits) - 1)
-
-    c0 = np.uint32(0)
-    a_approx_low = a & mask_approx
-    b_approx_low = b & mask_approx
-    b_approx_low_1 = np.uint32(b_approx_low >> 1)
-    a_approx_high = a - a_approx_low
-    b_approx_high = b - b_approx_low
-
-    b0 = np.uint32(b & ~(mask_32 - 1))
-    a0 = np.uint32(a & ~(mask_32 - 1))
-    s0 = np.uint32((a0 & c0) | (a0 & ~b0) | (~b0 & c0))
-
-    s_high = np.uint32(a_approx_high + b_approx_high)
-    s_low = np.uint32(
-        (
-            (a_approx_low & b_approx_low_1)
-            | (a_approx_low & ~b_approx_low)
-            | (~b_approx_low & b_approx_low_1)
-        )
-    )
-
-    s_low = np.uint32(s_low >> 1)
-    s_low = np.uint32((s_low << 1) + s0)
-    c_n = np.uint32(b_approx_low % 2)
-
-    s_high = np.uint32(s_high + c_n << (approx_bits))
-
-    return np.int32(s_high + s_low)  # numpy will automatically expand the type of data
-
-
-def approx_add_C(a: int, b: int, approx_bits: int) -> int:
-    a = np.uint32(a)
-    b = np.uint32(b)
-    mask_approx = np.uint32((1 << approx_bits) - 1)
-
-    a_approx_low = np.uint32(a & mask_approx)
-    b_approx_low = np.uint32(b & mask_approx)
-    a_approx_high = np.uint32(a - a_approx_low)
-    b_approx_high = np.uint32(b - b_approx_low)
-
-    s_high = np.uint32(a_approx_high + b_approx_high)
-    s_low = np.uint32(a_approx_low | b_approx_low)
-    s_high += np.uint32(
-        (b_approx_low >> approx_bits - 1) & (a_approx_low >> approx_bits - 1)
-    ) << (approx_bits + 1)
-
-    return s_high + s_low
-
-
-adder = approx_add_B
-approx_bits = 0
-
 INT32_MAX = np.iinfo(np.int32).max
 INT32_MIN = np.iinfo(np.int32).min
 UINT32_MAX = np.iinfo(np.uint32).max
@@ -101,8 +43,8 @@ def approx_sum_B(a_int: np.int32, b_int: np.int32, approx_bits: np.int32) -> np.
     s_low = np.uint32(s_low >> 1)
     s_low = np.uint32((s_low << 1) + s0)
     c_n = np.uint32(b_approx_low % 2)
-
-    s_high = np.uint32(s_high + c_n << (approx_bits))
+    c_n_uint = np.uint32(c_n << (approx_bits+1))
+    s_high = np.uint32(s_high +c_n_uint)
 
     sum_s = np.int32(s_high + s_low)
 
@@ -156,6 +98,12 @@ if __name__ == "__main__":
     for i in range(1, 1 << 32 - 1):
         j = random.randint(1, 1 << 32 - 1)
         true = np.int64(i + j)
-        result = approx_add_B(i, j, 1)
+        result = approx_sum_B(i, j, 1)
         diff = np.int64(true - result)
-        print(diff)
+        
+        if diff >10:
+            if true>np.iinfo(np.int32).max or true<np.iinfo(np.int32).min:
+                continue
+            print(f"{i},{j},{true},{result}")
+            result = approx_sum_B(i, j, 1)
+       

@@ -320,7 +320,7 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
-    from torchvision.datasets import CIFAR10
+    from CIFAR10 import CIFAR10
     from torchvision import transforms
     import pickle
 
@@ -331,14 +331,20 @@ if __name__ == "__main__":
         state_dict = pickle.load(state_in)
 
     params = load_params(state_dict)
-    transform_test = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ]
-    )
 
-    data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
+    def transform_test_numpy(pil_image):
+
+        img = np.array(pil_image).astype(np.float32) / 255.0
+
+        img = np.transpose(img, (2, 0, 1))
+
+        mean = np.array([0.4914, 0.4822, 0.4465]).reshape(3, 1, 1)
+        std = np.array([0.2023, 0.1994, 0.2010]).reshape(3, 1, 1)
+        img = (img - mean) / std
+
+        return img
+
+    data_test = CIFAR10("./cache/data/", train=False, transform=transform_test_numpy)
     test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
     resnet_numpy = ResNetNumpy(params)
     log = "TypeC_adder-resnet20_CIFAR10_q32.txt"
