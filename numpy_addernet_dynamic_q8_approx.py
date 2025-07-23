@@ -104,7 +104,7 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
     W_q, cols_q, scale = joint_quantize(W_col, cols)
 
     output = -np.abs(
-        approx_sum_C(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
+        approx_sum_B(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
     )
     output = np.sum(output, axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
@@ -339,7 +339,7 @@ if __name__ == "__main__":
     data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
     test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
     resnet_numpy = ResNetNumpy(params)
-    log = "TypeC_adder-resnet20_CIFAR10_q32.txt"
+    log = "TypeB_adder-resnet20_CIFAR10_q32.txt"
 
     for i in range(1, 33):
         approx_bits = i
@@ -348,7 +348,7 @@ if __name__ == "__main__":
         with torch.no_grad():
             for num, pair in enumerate(tqdm(test_loader, total=len(test_loader))):
                 images, labels = pair
-                if num > 1000:
+                if num > 2000:
                     break
                 images_np = images.numpy()
 
