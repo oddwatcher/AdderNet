@@ -1,11 +1,11 @@
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 from adder_approx import approx_sum_B, approx_sum_C
-
-
-def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
+from numba import jit,vectorize
+@jit
+def joint_quantize(tensor1, tensor2, qmin=np.iinfo(np.int32).min, qmax=np.iinfo(np.int32).max):
     # Should be done at train-quantize process however mother f*king torch does not support quantization of custom modules
-    max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
+    max_val = np.max(np.abs(np.concatenate([tensor1.flatten().astype(np.float32), tensor2.flatten().astype(np.float32)])))
     scale = max_val / qmax if max_val != 0 else 1.0
     q_tensor1 = np.round(tensor1 / scale).astype(np.int32)
     q_tensor2 = np.round(tensor2 / scale).astype(np.int32)
@@ -331,9 +331,9 @@ if __name__ == "__main__":
 
     params = load_params(state_dict)
 
-    def transform_test_numpy(pil_image):
+    def transform_test_numpy(pil_image:np.ndarray):
 
-        img = np.array(pil_image).astype(np.float32) / 255.0
+        img = pil_image.astype(np.float32) / 255.0
 
         img = np.transpose(img, (2, 0, 1))
 
