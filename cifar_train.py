@@ -1,8 +1,3 @@
-# Copyright (C) 2019. Huawei Technologies Co., Ltd. All rights reserved.
-
-# This program is free software; you can redistribute it and/or modify it under the terms of the BSD 3-Clause License.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the BSD 3-Clause License for more details.
 
 import os
 from resnet20 import resnet20
@@ -16,7 +11,6 @@ import math
 import time
 from tqdm import tqdm
 
-device = "cuda:1"
 
 parser = argparse.ArgumentParser(description="train-addernet")
 
@@ -24,13 +18,14 @@ parser = argparse.ArgumentParser(description="train-addernet")
 parser.add_argument("--data", type=str, default="./cache/data/")
 parser.add_argument("--output_dir", type=str, default="./cache/models/")
 parser.add_argument("--preweight", type=str, default=None)
-
-
+parser.add_argument("--device", type=str, default="cuda:0")
 args = parser.parse_args()
 
+if not torch.cuda.is_available():
+    device = "cpu"
 if args.preweight:
     net = resnet20()
-    net.load_state_dict(torch.load(args.preweight))
+    net.load_state_dict(torch.load(args.preweight,weights_only=True,map_location=device))
     net.to(device)
 else:
     net = resnet20().to(device)
@@ -41,7 +36,6 @@ os.makedirs(args.output_dir, exist_ok=True)
 acc = 0
 acc_best = 0
 weights_best = {}
-
 transform_train = transforms.Compose(
     [
         transforms.RandomCrop(32, padding=4),

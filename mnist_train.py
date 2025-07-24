@@ -1,8 +1,3 @@
-# Copyright (C) 2019. Huawei Technologies Co., Ltd. All rights reserved.
-
-# This program is free software; you can redistribute it and/or modify it under the terms of the BSD 3-Clause License.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the BSD 3-Clause License for more details.
 
 import os
 from resnet20MNIST import resnet20
@@ -22,7 +17,18 @@ parser = argparse.ArgumentParser(description="train-addernet")
 # Basic model parameters.
 parser.add_argument("--data", type=str, default="./cache/data/")
 parser.add_argument("--output_dir", type=str, default="./cache/models/")
+parser.add_argument("--preweight", type=str, default=None)
+parser.add_argument("--device", type=str, default="cuda:0")
 args = parser.parse_args()
+
+if not torch.cuda.is_available():
+    device = "cpu"
+if args.preweight:
+    net = resnet20()
+    net.load_state_dict(torch.load(args.preweight,weights_only=True,map_location=device))
+    net.to(device)
+else:
+    net = resnet20().to(device)
 start_time = time.asctime()
 log = args.output_dir + start_time + "log.txt"
 os.makedirs(args.output_dir, exist_ok=True)
@@ -30,7 +36,6 @@ os.makedirs(args.output_dir, exist_ok=True)
 acc = 0
 acc_best = 0
 weights_best = {}
-
 transform_train = transforms.Compose(
     [
         transforms.RandomCrop(32, padding=4),
@@ -51,8 +56,7 @@ data_test = MNIST(args.data, train=False, transform=transform_test)
 data_train_loader = DataLoader(data_train, batch_size=256, shuffle=True, num_workers=16)
 data_test_loader = DataLoader(data_test, batch_size=100, num_workers=0)
 
-net = resnet20().cuda()
-criterion = torch.nn.CrossEntropyLoss().cuda()
+criterion = torch.nn.CrossEntropyLoss().to(device)
 optimizer = torch.optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
 
 
@@ -67,13 +71,12 @@ def train(epoch, start_time):
     adjust_learning_rate(optimizer, epoch)
     global cur_batch_win
     net.train()
-    total_loss = 0
     loss_list, batch_list = [], []
     print("Train - Epoch %d" % epoch)
     for i, (images, labels) in tqdm(
         enumerate(data_train_loader), total=len(data_train_loader)
     ):
-        images, labels = Variable(images).cuda(), Variable(labels).cuda()
+        images, labels = Variable(images).to(device), Variable(labels).to(device)
 
         optimizer.zero_grad()
 
@@ -86,9 +89,10 @@ def train(epoch, start_time):
 
         loss.backward()
         optimizer.step()
-        total_loss += loss
-
-    avg_loss = total_loss / len(data_train_loader)
+    total_loss = 0
+    for i in loss_list:
+        total_loss += i
+    avg_loss = total_loss / len(loss_list)
     with open(log, "a") as f:
         f.write(
             "Train - Epoch %d, Avg. Loss: %f, Time:%dmin:%dsec \n "
@@ -110,7 +114,7 @@ def test():
         for i, (images, labels) in tqdm(
             enumerate(data_test_loader), total=(len(data_test_loader))
         ):
-            images, labels = Variable(images).cuda(), Variable(labels).cuda()
+            images, labels = Variable(images).to(device), Variable(labels).to(device)
             output = net(images)
             avg_loss += criterion(output, labels).sum()
             pred = output.data.max(1)[1]
@@ -130,18 +134,17 @@ def train_and_test(epoch, start):
     train(epoch, start)
     test()
     if epoch % 10 == 0:
-        torch.save(net.state_dict(), args.output_dir + "addernet_mono_%d.pt" % epoch)
-        torch.save(weights_best, args.output_dir + "addernet_mono_best.pt")
+        torch.save(weights_best, args.output_dir + "addernet_best.pt")
     else:
-        torch.save(net.state_dict(), args.output_dir + "addernet_mono_temp.pt")
+        torch.save(net.state_dict(), args.output_dir + "addernet_temp.pt")
 
 
 def main():
     epoch = 400
     for e in range(1, epoch):
         train_and_test(e, time.time())
-    torch.save(net.state_dict(), args.output_dir + "addernet_mono_final.pt")
-    torch.save(weights_best, args.output_dir + "addernet_mono_best.pt")
+    torch.save(net.state_dict(), args.output_dir + "addernet_final.pt")
+    torch.save(weights_best, args.output_dir + "addernet_best.pt")
 
 
 if __name__ == "__main__":
