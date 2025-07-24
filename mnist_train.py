@@ -23,6 +23,9 @@ args = parser.parse_args()
 
 if not torch.cuda.is_available():
     device = "cpu"
+else:
+    device = args.device
+    
 if args.preweight:
     net = resnet20()
     net.load_state_dict(torch.load(args.preweight,weights_only=True,map_location=device))
