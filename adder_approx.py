@@ -167,17 +167,53 @@ def approx_sum_C_32(
     return sum_s
 
 
-import random
+@vectorize(
+    ["int32(int32, int32, int32)"], target="parallel", fastmath=True, nopython=True
+)
+def approx_sum_PP(
+    a_int: np.int32, b_int: np.int32, approx_bits: np.int32
+) -> np.int32:
+
+    a_sign = a_int > 0
+    b_sign = b_int > 0
+    # sum/sub detection
+    mask_approx = np.uint32((1 << approx_bits) - 1)
+    a = np.uint32(a_int)
+    b = np.uint32(b_int)
+    a_approx_low = a & mask_approx
+    b_approx_low = b & mask_approx
+
+    a_approx_high = a - a_approx_low
+    b_approx_high = b - b_approx_low
+
+    s_high = np.uint32(a_approx_high + b_approx_high)
+    C = a_approx_low & b_approx_low
+    s_low = np.bitwise_or(np.bitwise_xor(a_approx_low, b_approx_low), C)
+    CMASK = np.uint32(1 << (approx_bits - 1))
+    sum_s = np.uint32(s_high + s_low)
+    cn = np.uint32(C & CMASK)
+    sum_s = np.int32(sum_s + cn)
+
+    if a_sign and b_sign:
+        if sum_s <= 0:
+            return np.int32(INT32_MAX)
+    elif not a_sign and not b_sign:
+        if sum_s >= 0:
+            return np.int32(INT32_MIN)
+    return sum_s
+
 
 if __name__ == "__main__":
+
+    import random
+
     for i in range(1, 1 << 32 - 1):
         j = random.randint(1, 1 << 32 - 1)
         true = np.int64(i + j)
-        result = approx_sum_B(i, j, 1)
+        result = approx_sum_PP(i, j, 1)
         diff = np.int64(true - result)
 
         if diff > 10:
             if true > np.iinfo(np.int32).max or true < np.iinfo(np.int32).min:
                 continue
             print(f"{i},{j},{true},{result}")
-            result = approx_sum_B(i, j, 1)

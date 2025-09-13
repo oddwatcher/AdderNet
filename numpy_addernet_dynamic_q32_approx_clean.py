@@ -1,6 +1,6 @@
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-from adder_approx import approx_sum_B, approx_sum_C
+from adder_approx import approx_sum_B, approx_sum_C,approx_sum_PP
 
 
 def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
@@ -103,7 +103,7 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
     W_q, cols_q, scale = joint_quantize(W_col, cols)
 
     output = -np.abs(
-        approx_sum_C(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
+        approx_sum_PP(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
     )
     output = np.sum(output, axis=1) * scale
     output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
@@ -346,7 +346,7 @@ if __name__ == "__main__":
     data_test = CIFAR10("./cache/data/", train=False, transform=transform_test_numpy)
     
     resnet_numpy = ResNetNumpy(params)
-    log = "TypeC_adder-resnet20_CIFAR10_q32.txt"
+    log = "TypePP_adder-resnet20_CIFAR10_q32.txt"
 
     for i in range(1, 33):
         approx_bits = i
