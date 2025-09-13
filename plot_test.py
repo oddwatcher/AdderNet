@@ -29,7 +29,7 @@ if __name__ == "__main__":
         plt.figure(figsize=(12, 6))
         plt.plot(x, y, marker="o", linestyle="-", color="b", label="Test Accuracy")
 
-        plt.title(f"TypeC Approx adder on addernet with int32 quantization", fontsize=16)
+        plt.title(f"TypePP Approx adder on addernet with int32 quantization", fontsize=16)
         plt.xlabel("Approx Bits", fontsize=12)
         plt.ylabel("Test Accuracy (%)", fontsize=12)
         plt.grid(True, linestyle="--", alpha=0.5)

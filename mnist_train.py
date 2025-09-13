@@ -48,7 +48,7 @@ transform_train = transforms.Compose(
 
 transform_test = transforms.Compose(
     [
-        transforms.RandomCrop(32, padding=4),
+        transforms.Resize(32),
         transforms.ToTensor(),
     ]
 )
