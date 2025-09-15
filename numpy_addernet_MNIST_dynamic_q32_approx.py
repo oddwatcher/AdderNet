@@ -1,10 +1,9 @@
-import torch
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
-from adder_approx import approx_sum_B, approx_sum_C
+from adder_approx import approx_sum_B, approx_sum_C,approx_sum_PP
 
 
-def joint_quantize(tensor1, tensor2, qmin=-(2**31), qmax=2**31 - 1):
+def joint_quantize(tensor1, tensor2, qmin=-(2**16), qmax=2**16 - 1):
     # Should be done at train-quantize process however mother f*king torch does not support quantization of custom modules
     max_val = np.max(np.abs(np.concatenate([tensor1.flatten(), tensor2.flatten()])))
     scale = max_val / qmax if max_val != 0 else 1.0
@@ -100,19 +99,23 @@ def forward_adder2d_approx(X, W, stride=1, padding=0, bias=None):
 
     cols = im2col_indices(X, h_filter, w_filter, padding=padding, stride=stride)
     W_col = W.reshape(n_filters, -1)
-
+    
+    output = -np.abs(W_col[:, :, np.newaxis] - cols[np.newaxis, :, :]).sum(axis=1).reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3) # Original implementation of addernet
+    
     W_q, cols_q, scale = joint_quantize(W_col, cols)
-
-    output = -np.abs(
-        approx_sum_B(W_q[:, :, np.newaxis], -cols_q[np.newaxis, :, :], approx_bits)
-    )
-    output = np.sum(output, axis=1) * scale
-    output = output.reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
-
+    
+    output_q = (-np.abs(W_q[:, :, np.newaxis] - cols_q[np.newaxis, :, :]).sum(axis=1)* scale).reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+    
+    output_q_a = output_q = (-np.abs(approx_sum_PP(W_q[:, :, np.newaxis], - cols_q[np.newaxis, :, :],approx_bits)).sum(axis=1)* scale).reshape(n_filters, n_x, h_out, w_out).transpose(1, 0, 2, 3)
+    
+    print(f"approx_bits: {approx_bits}, diff_q: {np.abs(output - output_q).sum()},diff_q_a: {np.abs(output - output_q).sum()},diff_q_q_a: {np.abs(output_q - output_q_a).sum()}")
+    
+    result = output_q_a
+    
     if bias is not None:
-        output += bias.reshape(1, -1, 1, 1)
+        result += bias.reshape(1, -1, 1, 1)
 
-    return output
+    return result
 
 
 def forward_adder2d_quantize(X, W, stride=1, padding=0, bias=None):
@@ -201,7 +204,7 @@ class ResNetNumpy:
     def _forward_basic_block(self, X, block_params):
         residual = X
 
-        X = forward_conv2d(
+        X = forward_adder2d_approx(
             X,
             block_params["conv1"]["weight"],
             stride=block_params["conv1"]["stride"],
@@ -210,7 +213,7 @@ class ResNetNumpy:
 
         X = forward_batchnorm2d(X, **block_params["bn1"])
         X = relu(X)
-        X = forward_conv2d(
+        X = forward_adder2d_approx(
             X,
             block_params["conv2"]["weight"],
             stride=block_params["conv2"]["stride"],
@@ -219,7 +222,7 @@ class ResNetNumpy:
         X = forward_batchnorm2d(X, **block_params["bn2"])
 
         if block_params.get("downsample", None):
-            residual = forward_conv2d(
+            residual = forward_adder2d_approx(
                 residual,
                 block_params["downsample"]["adder"]["weight"],
                 stride=block_params["downsample"]["stride"],
@@ -320,48 +323,59 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
-    from torchvision.datasets import MNIST
+    from CIFAR10 import CIFAR10
     from torchvision import transforms
-
+    import torch
+    
     global approx_bits
     approx_bits = 0
-    state_dict = torch.load("trained/addernet_MNIST_final.pt",map_location='cuda:0')
+    state_dict = torch.load("trained/addernet_MNIST_best.pt")
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
     params = load_params(state_dict)
-    transform_test = transforms.Compose(
+    
+    resnet_numpy = ResNetNumpy(params)
+    from torchvision.datasets import MNIST, CIFAR10
+    from torchvision import transforms
+
+    transform_test_CIFAR10 = transforms.Compose(
         [
-            transforms.Resize(32),
             transforms.ToTensor(),
-            
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ]
     )
-
-    data_test = MNIST("./cache/data/", train=False, transform=transform_test)
-    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=True)
-    resnet_numpy = ResNetNumpy(params)
+    transform_test_MNIST = transforms.Compose(
+    [
+        transforms.Resize(32),
+        transforms.ToTensor(),
+    ]
+)
+    data_test_MNIST = MNIST("./cache/data/", train=False, transform=transform_test_MNIST)
+    data_test_CIFAR = CIFAR10("./cache/data/", train=False, transform=transform_test_MNIST)
+    
+    test_loader = torch.utils.data.DataLoader(data_test_MNIST, batch_size=1, shuffle=False)
+    correct = 0
+    total = 0
     log = "TypePP_adder-resnet20_MNIST_q32.txt"
-
     for i in range(1, 33):
         approx_bits = i
         correct = 0
         total = 0
-        with torch.no_grad():
-            for num, pair in enumerate(tqdm(test_loader, total=len(test_loader))):
-                images, labels = pair
-                if num > 2000:
-                    break
-                images_np = images.numpy()
 
-                outputs = resnet_numpy.forward(images_np)
+        for num, pair in enumerate(tqdm(data_test_MNIST, total=1000)):
+            images, label = pair
+            if num > 1000:
+                break
+            images = np.expand_dims(images, axis=0)
+            outputs = resnet_numpy.forward(images)
 
-                predicted = np.argmax(outputs, axis=1)
+            predicted = np.argmax(outputs, axis=1).item()
 
-                total += labels.size(0)
-                correct += (predicted == labels.numpy()).sum().item()
-                print(
-                    f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}"
-                )
+            total += 1
+            correct += (predicted == label)
+            print(
+                f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}"
+            )
 
         print(f"Test Accuracy: {100 * correct / total:.2f}% approx_bits:{approx_bits}")
         with open(log, "a") as logout:

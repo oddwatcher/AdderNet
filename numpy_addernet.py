@@ -259,25 +259,33 @@ def load_params(state_dict_torch):
 
 if __name__ == "__main__":
     from tqdm import tqdm
-    state_dict = torch.load("trained/addernet_CIFAR10_best.pt")
+    state_dict = torch.load("trained/addernet_MNIST_best.pt")
 
     state_dict = {k: v.cpu().numpy() for k, v in state_dict.items()}
     params = load_params(state_dict)
 
     resnet_numpy = ResNetNumpy(params)
 
-    from torchvision.datasets import CIFAR10
+    from torchvision.datasets import MNIST, CIFAR10
     from torchvision import transforms
 
-    transform_test = transforms.Compose(
+    transform_test_CIFAR10 = transforms.Compose(
         [
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ]
     )
-
-    data_test = CIFAR10("./cache/data/", train=False, transform=transform_test)
-    test_loader = torch.utils.data.DataLoader(data_test, batch_size=1, shuffle=False)
+    transform_test_MNIST = transforms.Compose(
+    [
+        transforms.Resize(32),
+        transforms.ToTensor(),
+    ]
+)
+    data_test_MNIST = MNIST("./cache/data/", train=False, transform=transform_test_MNIST)
+    data_test_CIFAR = CIFAR10("./cache/data/", train=False, transform=transform_test_MNIST)
+    # 选择测试数据集
+    
+    test_loader = torch.utils.data.DataLoader(data_test_MNIST, batch_size=1, shuffle=False)
     correct = 0
     total = 0
     with torch.no_grad():
